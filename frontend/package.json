@@ -20,7 +20,8 @@
     "react-dom": "^16.8.6",
     "react-helmet": "^5.2.1",
     "reakit": "^1.0.0-beta.1",
-    "styled-components": "^4.2.0"
+    "styled-components": "^4.2.0",
+    "styled-tools": "^1.7.1"
   },
   "devDependencies": {
     "prettier": "^1.17.1"
