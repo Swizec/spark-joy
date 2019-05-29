@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import styled from "styled-components"
+import { Button } from "rebass"
 
 import { Heading, Flex } from "./styles"
 import { palette } from "styled-tools"
@@ -34,8 +35,9 @@ const RoundButton = styled.button`
 
 const Layout = styled.div`
   width: 450px;
+  height: 250px;
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 0.5fr 1fr 0.2fr;
 `
 
 const Question = styled(Heading)`
@@ -60,6 +62,7 @@ const WidgetBuilder = () => {
         <RoundButton>👎</RoundButton>
         <RoundButton>👍</RoundButton>
       </Flex>
+      <Button bg="primary">Export</Button>
     </Layout>
   )
 }
