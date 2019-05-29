@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import ReactDOM from "react-dom"
-import styled from "styled-components"
+import styled, { ServerStyleSheet } from "styled-components"
 import { Button } from "rebass"
 import { palette } from "styled-tools"
 import ButterToast, { Cinnamon } from "butter-toast"
@@ -80,10 +80,14 @@ const WidgetBuilder = () => {
   const [typeOfJoy, setTypeOfJoy] = useState("")
 
   function exportWidget() {
+    const widget = <Widget value={typeOfJoy} />
     const el = document.createElement("div")
-    ReactDOM.render(<Widget value={typeOfJoy} />, el)
+    ReactDOM.render(widget, el)
 
-    copyToClipboard(el.innerHTML)
+    // const sheet = new ServerStyleSheet()
+    const html = copyToClipboard(el.innerHTML)
+
+    // console.log(sheet.collectStyles(widget))
 
     ButterToast.raise({
       content: (
