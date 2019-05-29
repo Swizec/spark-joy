@@ -1,9 +1,12 @@
 import React, { useState } from "react"
+import ReactDOM from "react-dom"
 import styled from "styled-components"
 import { Button } from "rebass"
+import { palette } from "styled-tools"
 
 import { Heading, Flex } from "./styles"
-import { palette } from "styled-tools"
+
+import { copyToClipboard } from "../utils"
 
 const Input = styled.input`
   border: 0;
@@ -37,32 +40,57 @@ const Layout = styled.div`
   width: 450px;
   height: 250px;
   display: grid;
-  grid-template-rows: 0.5fr 1fr 0.2fr;
+  grid-template-rows: 1fr 0.2fr;
+`
+
+const WidgetLayout = styled.div`
+  width: 450px;
+  display: grid;
+  grid-template-rows: 0.3fr 0.7fr;
 `
 
 const Question = styled(Heading)`
   text-align: center;
 `
 
+const Widget = ({ editable, value, update }) => (
+  <WidgetLayout>
+    <Question h2>
+      Did this{" "}
+      {editable ? (
+        <Input
+          type="text"
+          value={value}
+          onChange={event => update(event.target.value)}
+        />
+      ) : (
+        value
+      )}{" "}
+      spark joy?
+    </Question>
+    <Flex row>
+      <RoundButton>👎</RoundButton>
+      <RoundButton>👍</RoundButton>
+    </Flex>
+  </WidgetLayout>
+)
+
 const WidgetBuilder = () => {
   const [typeOfJoy, setTypeOfJoy] = useState("")
 
+  function exportWidget() {
+    const el = document.createElement("div")
+    ReactDOM.render(<Widget value={typeOfJoy} />, el)
+
+    copyToClipboard(el.innerHTML)
+  }
+
   return (
     <Layout>
-      <Question h2>
-        Did this{" "}
-        <Input
-          type="text"
-          value={typeOfJoy}
-          onChange={event => setTypeOfJoy(event.target.value)}
-        />{" "}
-        spark joy?
-      </Question>
-      <Flex row>
-        <RoundButton>👎</RoundButton>
-        <RoundButton>👍</RoundButton>
-      </Flex>
-      <Button bg="primary">Export</Button>
+      <Widget editable value={typeOfJoy} update={setTypeOfJoy} />
+      <Button bg="primary" onClick={exportWidget}>
+        Export
+      </Button>
     </Layout>
   )
 }
