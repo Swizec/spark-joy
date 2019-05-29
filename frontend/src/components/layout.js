@@ -9,6 +9,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import { StaticQuery, graphql } from "gatsby"
 import styled, { ThemeProvider } from "styled-components"
+import ButterToast, { POS_TOP, POS_RIGHT } from "butter-toast"
 
 import "./layout.css"
 
@@ -50,6 +51,9 @@ const Layout = ({ children }) => (
               © {new Date().getFullYear()}, Built with ❤️ on the internet
             </CentralColumn>
           </Footer>
+          <ButterToast
+            position={{ vertical: POS_TOP, horizontal: POS_RIGHT }}
+          />
         </Body>
       </ThemeProvider>
     )}
