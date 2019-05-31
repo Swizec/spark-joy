@@ -7,6 +7,7 @@
   "dependencies": {
     "babel-plugin-styled-components": "^1.10.0",
     "butter-toast": "^3.3.3",
+    "css": "^2.2.4",
     "gatsby": "^2.5.7",
     "gatsby-image": "^2.1.0",
     "gatsby-plugin-manifest": "^2.1.1",
