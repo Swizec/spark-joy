@@ -22,7 +22,7 @@ functions:
         handler: dist/graphql.handler
         events:
             - http:
-                  path: hello
+                  path: graphql
                   method: GET
                   cors: true
 

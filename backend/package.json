@@ -19,6 +19,7 @@
     "homepage": "https://github.com/Swizec/spark-joy#readme",
     "dependencies": {
         "@types/aws-lambda": "^8.10.26",
+        "@types/graphql": "^14.2.0",
         "apollo-server-lambda": "^2.5.1",
         "graphql": "^14.3.1"
     }
