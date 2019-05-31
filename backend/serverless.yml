@@ -1,0 +1,15 @@
+service: spark-joy
+
+provider:
+    name: aws
+    runtime: nodejs8.10
+    stage: dev
+
+functions:
+    graphql:
+        handler: dist/graphql.handler
+        events:
+            - http:
+                  path: hello
+                  method: GET
+                  cors: true

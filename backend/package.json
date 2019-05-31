@@ -1,0 +1,23 @@
+{
+    "name": "spark-joy-backend",
+    "version": "0.1.0",
+    "description": "The backend for the Spark Joy project",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc",
+        "deploy": "npm run build && sls deploy"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Swizec/spark-joy.git"
+    },
+    "author": "Swizec Teller",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Swizec/spark-joy/issues"
+    },
+    "homepage": "https://github.com/Swizec/spark-joy#readme",
+    "dependencies": {
+        "@types/aws-lambda": "^8.10.26"
+    }
+}
