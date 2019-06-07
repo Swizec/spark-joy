@@ -30,15 +30,26 @@ const resolvers = {
             const widgetId = uuidv4();
 
             const result = await new Promise((resolve, reject) => {
-                dynamoDB.update({
-                    TableName: process.env.DYNAMODB_TABLE!,
-                    Key: { widgetId },
-                    UpdateExpression: "SET widgetId = :widgetId, name = :name",
-                    ExpressionAttributeValues: {
-                        ":widgetId": widgetId,
-                        ":name": name
+                dynamoDB.update(
+                    {
+                        TableName: process.env.DYNAMODB_TABLE!,
+                        Key: { widgetId },
+                        UpdateExpression:
+                            "SET widgetId = :widgetId, widgetName = :name",
+                        ExpressionAttributeValues: {
+                            ":widgetId": widgetId,
+                            ":widgetName": name
+                        }
+                    },
+                    (err, result) => {
+                        if (err) {
+                            console.error(err);
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
                     }
-                });
+                );
             });
 
             console.log(result);
