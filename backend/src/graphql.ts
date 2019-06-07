@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from "apollo-server-lambda";
 import uuidv4 from "uuid/v4";
-import { updateItem } from "./dynamodb";
+import { updateItem, getItem } from "./dynamodb";
 
 const typeDefs = gql`
     type Widget {
@@ -11,29 +11,46 @@ const typeDefs = gql`
     }
 
     type Query {
-        hello: String
+        widget(widgetId: String!): Widget
     }
 
     type Mutation {
-        saveWidget(name: String!): Widget
+        saveWidget(name: String!, widgetId: String): Widget
     }
 `;
 
 const resolvers = {
     Query: {
-        hello: () => "Hello world"
+        widget: async (_: any, { widgetId }: { widgetId: string }) => {
+            const result = await getItem({ Key: { widgetId } });
+
+            if (!result.Item) {
+                return {};
+            }
+
+            return {
+                ...result.Item,
+                name: result.Item.widgetName
+            };
+        }
     },
     Mutation: {
-        saveWidget: async (_: any, { name }: { name: string }) => {
-            const widgetId = uuidv4();
+        saveWidget: async (
+            _: any,
+            { name, widgetId }: { name: string; widgetId?: string }
+        ) => {
+            if (!widgetId) {
+                widgetId = uuidv4();
+            }
 
-            const result = updateItem({
+            const result = await updateItem({
                 Key: { widgetId },
                 UpdateExpression:
-                    "SET widgetId = :widgetId, widgetName = :name",
+                    "SET widgetName = :name, thumbsup = :thumbsup, thumbsdown = :thumbsdown",
                 ExpressionAttributeValues: {
-                    ":widgetId": widgetId,
-                    ":name": name
+                    ":name": name,
+                    ":thumbsup": 0,
+                    ":thumbsdown": 0
                 }
             });
 
