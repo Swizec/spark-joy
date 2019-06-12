@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from "apollo-server-lambda";
 import uuidv4 from "uuid/v4";
-import { updateItem, getItem } from "./dynamodb";
+import { updateItem, getItem, scanItems } from "./dynamodb";
 
 const typeDefs = gql`
     type Widget {
@@ -12,6 +12,7 @@ const typeDefs = gql`
 
     type Query {
         widget(widgetId: String!): Widget
+        allWidget: [Widget]
     }
 
     type Mutation {
@@ -32,6 +33,18 @@ const resolvers = {
                 ...result.Item,
                 name: result.Item.widgetName
             };
+        },
+        allWidget: async () => {
+            const result = await scanItems({});
+
+            if (!result.Items) {
+                return [];
+            }
+
+            return result.Items.map(widget => ({
+                ...widget,
+                name: widget.widgetName
+            }));
         }
     },
     Mutation: {
