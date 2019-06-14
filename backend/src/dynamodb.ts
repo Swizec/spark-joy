@@ -11,6 +11,7 @@ interface UpdateItemParams {
     ExpressionAttributeValues: {
         [key: string]: string | number;
     };
+    ReturnValues?: string;
 }
 
 interface GetItemParams {
@@ -24,7 +25,9 @@ interface ScanItemsParams {
     TableName?: string;
 }
 
-export const updateItem = async (params: UpdateItemParams) => {
+export const updateItem = async (
+    params: UpdateItemParams
+): Promise<AWS.DynamoDB.DocumentClient.UpdateItemOutput> => {
     const query = {
         TableName: process.env.DYNAMODB_TABLE!,
         ...params
