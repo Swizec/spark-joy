@@ -27,6 +27,7 @@
     "react-apollo-hooks": "^0.4.5",
     "react-dom": "^16.8.6",
     "react-helmet": "^5.2.1",
+    "react-spinners": "^0.5.4",
     "reakit": "^1.0.0-beta.1",
     "rebass": "^3.1.0",
     "styled-components": "^4.2.0",
