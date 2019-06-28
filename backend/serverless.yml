@@ -5,7 +5,8 @@ provider:
     runtime: nodejs8.10
     stage: dev
     environment:
-        DYNAMODB_TABLE: ${self:service}-db-${self:provider.stage}
+        WIDGETS_TABLE: ${self:service}-widgets-${self:provider.stage}
+        FEEDBACKS_TABLE: ${self:service}-feedbacks-${self:provider.stage}
     iamRoleStatements:
         - Effect: Allow
           Action:
@@ -15,7 +16,16 @@ provider:
               - dynamodb:PutItem
               - dynamodb:UpdateItem
               - dynamodb:DeleteItem
-          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.WIDGETS_TABLE}"
+        - Effect: Allow
+          Action:
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FEEDBACKS_TABLE}"
 
 functions:
     graphql:
@@ -44,4 +54,17 @@ resources:
                 ProvisionedThroughput:
                     ReadCapacityUnits: 1
                     WriteCapacityUnits: 1
-                TableName: ${self:provider.environment.DYNAMODB_TABLE}
+                TableName: ${self:provider.environment.WIDGETS_TABLE}
+        JoyFeedbacksTable:
+            Type: "AWS::DynamoDB::Table"
+            Properties:
+                AttributeDefinitions:
+                    - AttributeName: widgetId
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: widgetId
+                      KeyType: HASH
+                ProvisionedThroughput:
+                    ReadCapacityUnits: 1
+                    WriteCapacityUnits: 1
+                TableName: ${self:provider.environment.FEEDBACKS_TABLE}

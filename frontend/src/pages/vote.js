@@ -9,7 +9,7 @@ import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
 
-import { WIDGET_VOTE_QUERY } from "../queries"
+import { WIDGET_VOTE_QUERY, SAVE_WIDGET_FEEDBACK_QUERY } from "../queries"
 
 async function saveVote({ widgetId, voteType, apolloClient }) {
   await apolloClient.mutate({
@@ -38,8 +38,14 @@ function renderField({ id, label, type }) {
   )
 }
 
-const onSubmit = async values => {
-  window.alert(JSON.stringify(values, 0, 2))
+const onSubmit = async ({ widgetId, values, apolloClient }) => {
+  await apolloClient.mutate({
+    mutation: SAVE_WIDGET_FEEDBACK_QUERY,
+    variables: {
+      widgetId,
+      values: JSON.stringify(values),
+    },
+  })
 }
 
 const VotePage = ({ pageContext }) => {
@@ -55,7 +61,7 @@ const VotePage = ({ pageContext }) => {
       <SEO title="Thank You" />
       <CentralColumn style={{ paddingTop: "2em" }}>
         <Form
-          onSubmit={onSubmit}
+          onSubmit={values => onSubmit({ widgetId, values, apolloClient })}
           render={({ handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               {followupQuestions.map(renderField)}
