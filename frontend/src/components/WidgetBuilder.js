@@ -85,10 +85,16 @@ const WidgetBuilder = () => {
   const apolloClient = useApolloClient()
 
   async function exportWidget() {
+    const followupQuestions = [
+      { label: "Why?", type: "text" },
+      { label: "Have a burning question?", type: "text" },
+      { label: "Would you recommend this to a friend?", type: "boolean" },
+    ]
     const { data } = await apolloClient.mutate({
       mutation: SAVE_WIDGET_QUERY,
       variables: {
         name: typeOfJoy,
+        followupQuestions: JSON.stringify(followupQuestions),
       },
     })
 

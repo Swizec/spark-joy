@@ -26,40 +26,47 @@ exports.createPages = ({ graphql, actions }) => {
           allWidget {
             widgetId
             name
+            followupQuestions
           }
         }
       }
     `)
 
-    result.data.widgetsapi.allWidget.forEach(({ widgetId, name }) => {
-      const votePath = path.resolve("./src/pages/vote.js")
-      const widgetPath = path.resolve("./src/pages/widget.js")
+    result.data.widgetsapi.allWidget.forEach(
+      ({ widgetId, name, followupQuestions }) => {
+        const votePath = path.resolve("./src/pages/vote.js")
+        const widgetPath = path.resolve("./src/pages/widget.js")
 
-      createPage({
-        path: `/${widgetId}/thumbsup`,
-        component: votePath,
-        context: {
-          widgetId,
-          voteType: "thumbsup",
-        },
-      })
-      createPage({
-        path: `/${widgetId}/thumbsdown`,
-        component: votePath,
-        context: {
-          widgetId,
-          voteType: "thumbsdown",
-        },
-      })
-      createPage({
-        path: widgetId,
-        component: widgetPath,
-        context: {
-          widgetId,
-          name,
-        },
-      })
-    })
+        followupQuestions = JSON.parse(followupQuestions)
+
+        createPage({
+          path: `/${widgetId}/thumbsup`,
+          component: votePath,
+          context: {
+            widgetId,
+            followupQuestions,
+            voteType: "thumbsup",
+          },
+        })
+        createPage({
+          path: `/${widgetId}/thumbsdown`,
+          component: votePath,
+          context: {
+            widgetId,
+            followupQuestions,
+            voteType: "thumbsdown",
+          },
+        })
+        createPage({
+          path: widgetId,
+          component: widgetPath,
+          context: {
+            widgetId,
+            name,
+          },
+        })
+      }
+    )
 
     resolve()
   })
