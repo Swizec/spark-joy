@@ -33,6 +33,7 @@
     "reakit": "^1.0.0-beta.1",
     "rebass": "^3.1.0",
     "styled-components": "^4.2.0",
+    "styled-system": "^5.0.12",
     "styled-tools": "^1.7.1"
   },
   "devDependencies": {

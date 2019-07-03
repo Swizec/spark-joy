@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { useApolloClient } from "react-apollo-hooks"
 import { Form, Field } from "react-final-form"
-import { Button } from "rebass"
+import { Button, Heading, Text, Box } from "rebass"
+import styled from "styled-components"
+import { fontSize, lineHeight, fontFamily } from "styled-system"
 
 import { CentralColumn } from "../components/styles"
 
@@ -9,6 +11,36 @@ import Image from "../components/image"
 import SEO from "../components/seo"
 
 import { WIDGET_VOTE_QUERY, SAVE_WIDGET_FEEDBACK_QUERY } from "../queries"
+
+const FullScreen = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+`
+
+const Input = styled("input")(
+  {
+    padding: "0.5rem 1rem",
+    width: "80%",
+    border: 0,
+  },
+  fontSize,
+  lineHeight,
+  fontFamily
+)
+
+const ExplainerText = styled(Text)`
+  width: 80%;
+  text-align: left;
+  display: inline-block;
+`
+
+const BulletText = styled(Text)`
+  display: inline;
+`
 
 async function saveVote({ widgetId, voteType, apolloClient }) {
   await apolloClient.mutate({
@@ -21,18 +53,34 @@ async function saveVote({ widgetId, voteType, apolloClient }) {
   })
 }
 
-function renderField({ id, label, type }) {
+function renderField({ index, id, label, type }) {
+  const Component = props => (
+    <>
+      <Input fontSize={[3, 4, 5]} {...props} />
+      {props.meta.active ? (
+        <ExplainerText fontSize={[0.5, 1, 1]}>
+          <strong>Enter</strong> to submit
+        </ExplainerText>
+      ) : null}
+    </>
+  )
+
   return (
     <div key={id}>
-      <label>{label}</label>
+      <Heading fontSize={[4, 5, 6]}>
+        <label>{label}</label>
+      </Heading>
       <br />
-      <Field
-        name={`field_${id}`}
-        component="input"
-        type="text"
-        initialValue=""
-        placeholder="Listen to your gut :)"
-      />
+      <Box>
+        <BulletText fontSize={[1, 2, 3]}>{index + 1}. 👉</BulletText>
+        <Field
+          name={`field_${id}`}
+          component={Component}
+          type="text"
+          initialValue=""
+          placeholder="Listen to your gut :)"
+        />
+      </Box>
     </div>
   )
 }
@@ -68,19 +116,20 @@ const VotePage = ({ pageContext }) => {
   }
 
   return (
-    <>
+    <FullScreen>
       <SEO title="Thank You" />
-      <CentralColumn style={{ paddingTop: "2em" }}>
-        <Form
-          onSubmit={onSubmit}
-          render={({ handleSubmit }) => (
-            <form onSubmit={handleSubmit}>
-              {renderField(followupQuestions[fieldIndex])}
-            </form>
-          )}
-        />
-      </CentralColumn>
-    </>
+      <Form
+        onSubmit={onSubmit}
+        render={({ handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            {renderField({
+              index: fieldIndex,
+              ...followupQuestions[fieldIndex],
+            })}
+          </form>
+        )}
+      />
+    </FullScreen>
   )
 }
 
