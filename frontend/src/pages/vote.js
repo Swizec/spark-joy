@@ -1,11 +1,10 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useApolloClient } from "react-apollo-hooks"
 import { Form, Field } from "react-final-form"
 import { Button } from "rebass"
 
 import { CentralColumn } from "../components/styles"
 
-import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
 
@@ -24,7 +23,7 @@ async function saveVote({ widgetId, voteType, apolloClient }) {
 
 function renderField({ id, label, type }) {
   return (
-    <div>
+    <div key={id}>
       <label>{label}</label>
       <br />
       <Field
@@ -38,39 +37,50 @@ function renderField({ id, label, type }) {
   )
 }
 
-const onSubmit = async ({ widgetId, values, apolloClient }) => {
-  await apolloClient.mutate({
-    mutation: SAVE_WIDGET_FEEDBACK_QUERY,
-    variables: {
-      widgetId,
-      values: JSON.stringify(values),
-    },
-  })
-}
+// Final submission method
+//
+// const onSubmit = async ({ widgetId, values, apolloClient }) => {
+//   await apolloClient.mutate({
+//     mutation: SAVE_WIDGET_FEEDBACK_QUERY,
+//     variables: {
+//       widgetId,
+//       values: JSON.stringify(values),
+//     },
+//   })
+// }
 
 const VotePage = ({ pageContext }) => {
   const apolloClient = useApolloClient()
   const { widgetId, voteType, followupQuestions } = pageContext
 
+  const [fieldIndex, setFieldIndex] = useState(0)
+
   useEffect(() => {
     saveVote({ widgetId, voteType, apolloClient })
   }, [])
 
+  function onSubmit(values) {
+    if (fieldIndex >= followupQuestions.length - 1) {
+      console.log(values)
+    } else {
+      setFieldIndex(fieldIndex + 1)
+    }
+  }
+
   return (
-    <Layout>
+    <>
       <SEO title="Thank You" />
       <CentralColumn style={{ paddingTop: "2em" }}>
         <Form
-          onSubmit={values => onSubmit({ widgetId, values, apolloClient })}
+          onSubmit={onSubmit}
           render={({ handleSubmit }) => (
             <form onSubmit={handleSubmit}>
-              {followupQuestions.map(renderField)}
-              <Button type="submit">Give feedback 🤘</Button>
+              {renderField(followupQuestions[fieldIndex])}
             </form>
           )}
         />
       </CentralColumn>
-    </Layout>
+    </>
   )
 }
 
