@@ -53,22 +53,22 @@ async function saveVote({ widgetId, voteType, apolloClient }) {
   })
 }
 
-function renderField({ index, id, label, type }) {
-  const Component = props => (
-    <>
-      <Input
-        fontSize={[3, 4, 5]}
-        placeholder="Listen to your gut :)"
-        {...props.input}
-      />
-      {props.meta.active ? (
-        <ExplainerText fontSize={[0.5, 1, 1]}>
-          <strong>Enter</strong> to submit
-        </ExplainerText>
-      ) : null}
-    </>
-  )
+const Component = props => (
+  <>
+    <Input
+      fontSize={[3, 4, 5]}
+      placeholder="Listen to your gut :)"
+      {...props.input}
+    />
+    {props.meta.active ? (
+      <ExplainerText fontSize={[0.5, 1, 1]}>
+        <strong>Enter</strong> to submit
+      </ExplainerText>
+    ) : null}
+  </>
+)
 
+function renderField({ index, id, label, type }) {
   return (
     <div key={id}>
       <Heading fontSize={[4, 5, 6]}>
