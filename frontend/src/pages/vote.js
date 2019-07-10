@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useApolloClient } from "react-apollo-hooks"
 import { Form, Field } from "react-final-form"
-import { Button, Heading, Text, Box } from "rebass"
+import { Button, Heading, Text, Box, Flex } from "rebass"
 import styled from "styled-components"
 import { fontSize, lineHeight, fontFamily } from "styled-system"
 
@@ -32,6 +32,10 @@ const Input = styled("input")(
   fontFamily
 )
 
+const InputBox = styled(Box)`
+  height: 60px;
+`
+
 const ExplainerText = styled(Text)`
   width: 80%;
   text-align: left;
@@ -53,8 +57,9 @@ async function saveVote({ widgetId, voteType, apolloClient }) {
   })
 }
 
-const Component = props => (
-  <>
+const InputComponent = props => (
+  <InputBox>
+    <BulletText fontSize={[1, 2, 3]}>{props.index + 1}. 👉</BulletText>
     <Input
       fontSize={[3, 4, 5]}
       placeholder="Listen to your gut :)"
@@ -65,7 +70,7 @@ const Component = props => (
         <strong>Enter</strong> to submit
       </ExplainerText>
     ) : null}
-  </>
+  </InputBox>
 )
 
 function renderField({ index, id, label, type }) {
@@ -75,15 +80,13 @@ function renderField({ index, id, label, type }) {
         <label>{label}</label>
       </Heading>
       <br />
-      <Box>
-        <BulletText fontSize={[1, 2, 3]}>{index + 1}. 👉</BulletText>
-        <Field
-          name={`field_${id}`}
-          component={Component}
-          type="text"
-          initialValue=""
-        />
-      </Box>
+      <Field
+        name={`field_${id}`}
+        component={InputComponent}
+        type="text"
+        initialValue=""
+        index={index}
+      />
     </div>
   )
 }
