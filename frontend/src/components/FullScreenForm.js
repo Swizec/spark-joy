@@ -46,7 +46,9 @@ const InputComponent = props => (
       {true ? (
         <ExplainerText fontSize={[0.5, 1, 1]} key="explainer">
           <strong>Enter</strong> to submit, or{" "}
-          <Button variant="helper">OK</Button>
+          <Button variant="helper" type="submit">
+            OK ✓
+          </Button>
         </ExplainerText>
       ) : null}
     </PoseGroup>
