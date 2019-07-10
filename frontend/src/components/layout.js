@@ -8,12 +8,11 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { StaticQuery, graphql } from "gatsby"
-import styled, { ThemeProvider } from "styled-components"
+import styled from "styled-components"
 import ButterToast, { POS_TOP, POS_RIGHT } from "butter-toast"
 
 import "./layout.css"
 
-import theme from "./theme"
 import Header from "./header"
 import { CentralColumn } from "./styles"
 
@@ -40,22 +39,18 @@ const Layout = ({ children }) => (
       }
     `}
     render={data => (
-      <ThemeProvider theme={theme}>
-        <Body>
-          <Header siteTitle={data.site.siteMetadata.title} />
+      <Body>
+        <Header siteTitle={data.site.siteMetadata.title} />
 
-          <main>{children}</main>
+        <main>{children}</main>
 
-          <Footer>
-            <CentralColumn>
-              © {new Date().getFullYear()}, Built with ❤️ on the internet
-            </CentralColumn>
-          </Footer>
-          <ButterToast
-            position={{ vertical: POS_TOP, horizontal: POS_RIGHT }}
-          />
-        </Body>
-      </ThemeProvider>
+        <Footer>
+          <CentralColumn>
+            © {new Date().getFullYear()}, Built with ❤️ on the internet
+          </CentralColumn>
+        </Footer>
+        <ButterToast position={{ vertical: POS_TOP, horizontal: POS_RIGHT }} />
+      </Body>
     )}
   />
 )
