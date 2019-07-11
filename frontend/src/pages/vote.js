@@ -44,25 +44,19 @@ const VotePage = ({ pageContext }) => {
   const apolloClient = useApolloClient()
   const { widgetId, voteType, followupQuestions } = pageContext
 
-  const [fieldIndex, setFieldIndex] = useState(0)
-
   useEffect(() => {
     saveVote({ widgetId, voteType, apolloClient })
   }, [])
 
   function onSubmit(values) {
-    if (fieldIndex >= followupQuestions.length - 1) {
-      console.log(values)
-    } else {
-      setFieldIndex(fieldIndex + 1)
-    }
+    console.log(values)
   }
 
   return (
     <FullScreen>
       <SEO title="Thank You" />
       <FullScreenForm
-        fieldIndex={fieldIndex}
+        onSubmit={onSubmit}
         followupQuestions={followupQuestions}
       />
     </FullScreen>
