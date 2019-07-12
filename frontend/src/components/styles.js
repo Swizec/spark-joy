@@ -33,3 +33,7 @@ export const Flex = styled.div`
   flex-direction: ${props => (props.column ? "column" : "row")};
   justify-content: center;
 `
+
+export const Footer = styled.footer`
+  font-size: 0.5em;
+`

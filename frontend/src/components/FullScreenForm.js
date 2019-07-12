@@ -50,7 +50,10 @@ const InputComponent = props => (
     />
     <PoseGroup>
       {props.meta.active ? (
-        <ExplainerText fontSize={[0.5, 1, 1]} key="explainer">
+        <ExplainerText
+          fontSize={[0.5, 1, 1]}
+          key={`explainer_${props.input.name}`}
+        >
           <strong>Enter</strong> to submit, or{" "}
           <Button variant="helper" type="submit">
             OK ✓
@@ -67,9 +70,8 @@ function renderField({ index, id, label, type }) {
       <Heading fontSize={[4, 5, 6]}>
         <label>{label}</label>
       </Heading>
-      <br key="break" />
+      <br />
       <Field
-        key={`field_${id}`}
         name={`field_${id}`}
         component={InputComponent}
         type="text"

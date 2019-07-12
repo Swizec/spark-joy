@@ -14,11 +14,7 @@ import ButterToast, { POS_TOP, POS_RIGHT } from "butter-toast"
 import "./layout.css"
 
 import Header from "./header"
-import { CentralColumn } from "./styles"
-
-const Footer = styled.footer`
-  font-size: 0.5em;
-`
+import { CentralColumn, Footer } from "./styles"
 
 const Body = styled.div`
   display: grid;
