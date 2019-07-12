@@ -51,26 +51,54 @@ const VoteTypeHeading = ({ voteType, name }) =>
     </Heading>
   )
 
+const ThankYouView = () => (
+  <>
+    <div />
+    <div>
+      <img src="https://media.giphy.com/media/QAsBwSjx9zVKoGp9nr/giphy.gif" />
+      <Heading fontSize={[3, 4, 5]}>
+        ❤️️️ Thank you, you're the best! ❤️
+      </Heading>
+    </div>
+  </>
+)
+
+const FormView = ({ voteType, onSubmit, followupQuestions, name }) => (
+  <>
+    <VoteTypeHeading voteType={voteType} name={name} />
+    <FullScreenForm onSubmit={onSubmit} followupQuestions={followupQuestions} />
+  </>
+)
+
 const VotePage = ({ pageContext }) => {
   const apolloClient = useApolloClient()
   const { widgetId, voteType, followupQuestions, name } = pageContext
+  const [showThankYou, setShowThankYou] = useState(false)
 
   useEffect(() => {
     saveVote({ widgetId, voteType, apolloClient })
   }, [])
 
   function onSubmit(values) {
+    if (Object.values(values).length >= followupQuestions.length) {
+      setShowThankYou(true)
+    }
     console.log(values)
   }
 
   return (
     <FullScreen>
       <SEO title="Thank You" />
-      <VoteTypeHeading voteType={voteType} name={name} />
-      <FullScreenForm
-        onSubmit={onSubmit}
-        followupQuestions={followupQuestions}
-      />
+      {showThankYou ? (
+        <ThankYouView />
+      ) : (
+        <FormView
+          voteType={voteType}
+          onSubmit={onSubmit}
+          followupQuestions={followupQuestions}
+          name={name}
+        />
+      )}
       <Footer>
         © {new Date().getFullYear()}, Built with ❤️ on the internet
       </Footer>

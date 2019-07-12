@@ -86,10 +86,8 @@ export const FullScreenForm = ({ onSubmit, followupQuestions }) => {
   const [fieldIndex, setFieldIndex] = useState(0)
 
   function handleSubmit(values) {
-    if (fieldIndex >= followupQuestions.length - 1) {
-      console.log(values)
-      // onSubmit(values)
-    } else {
+    onSubmit(values)
+    if (fieldIndex < followupQuestions.length) {
       setFieldIndex(fieldIndex + 1)
     }
   }
