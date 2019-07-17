@@ -6,7 +6,7 @@ provider:
     stage: dev
     environment:
         WIDGETS_TABLE: ${self:service}-widgets-${self:provider.stage}
-        FEEDBACKS_TABLE: ${self:service}-feedbacks-${self:provider.stage}
+        FEEDBACKS_TABLE: ${self:service}-votes-${self:provider.stage}
     iamRoleStatements:
         - Effect: Allow
           Action:
@@ -61,9 +61,13 @@ resources:
                 AttributeDefinitions:
                     - AttributeName: widgetId
                       AttributeType: S
+                    - AttributeName: voteId
+                      AttributeType: S
                 KeySchema:
                     - AttributeName: widgetId
                       KeyType: HASH
+                    - AttributeName: voteId
+                      KeyType: RANGE
                 ProvisionedThroughput:
                     ReadCapacityUnits: 1
                     WriteCapacityUnits: 1
