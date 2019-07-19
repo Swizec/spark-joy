@@ -17,6 +17,8 @@ const auth = new Auth()
 const Login = () => {
   const { isAuthenticated } = auth
 
+  console.log(auth.getUser())
+
   if (isAuthenticated()) {
     return <Button onClick={auth.logout}>Logout {auth.getUserName()}</Button>
   } else {
