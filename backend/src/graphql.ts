@@ -5,6 +5,7 @@ import { widget, allWidget } from "./queries";
 const typeDefs = gql`
     type Widget {
         name: String!
+        userId: String!
         widgetId: String!
         thumbsup: Int
         thumbsdown: Int
@@ -35,6 +36,7 @@ const typeDefs = gql`
     type Mutation {
         saveWidget(
             name: String!
+            userId: String!
             widgetId: String
             followupQuestions: String
         ): Widget

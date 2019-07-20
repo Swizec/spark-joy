@@ -5,16 +5,22 @@ export const saveWidget = async (
     _: any,
     {
         name,
+        userId,
         widgetId,
         followupQuestions
-    }: { name: string; widgetId?: string; followupQuestions?: string }
+    }: {
+        name: string;
+        userId: string;
+        widgetId?: string;
+        followupQuestions?: string;
+    }
 ) => {
     if (!widgetId) {
         widgetId = uuidv4();
     }
 
     const result = await updateItem({
-        Key: { widgetId },
+        Key: { userId, widgetId },
         UpdateExpression:
             "SET widgetName = :name, thumbsup = :thumbsup, thumbsdown = :thumbsdown, followupQuestions = :followupQuestions",
         ExpressionAttributeValues: {

@@ -24,5 +24,4 @@ export const allWidget = async () => {
         ...widget,
         name: widget.widgetName
     }));
-}
-    }
+};

@@ -5,7 +5,7 @@ provider:
     runtime: nodejs8.10
     stage: dev
     environment:
-        WIDGETS_TABLE: ${self:service}-widgets-${self:provider.stage}
+        WIDGETS_TABLE: ${self:service}-widgets2-${self:provider.stage}
         FEEDBACKS_TABLE: ${self:service}-votes-${self:provider.stage}
     iamRoleStatements:
         - Effect: Allow
@@ -46,11 +46,15 @@ resources:
             Type: "AWS::DynamoDB::Table"
             Properties:
                 AttributeDefinitions:
+                    - AttributeName: userId
+                      AttributeType: S
                     - AttributeName: widgetId
                       AttributeType: S
                 KeySchema:
-                    - AttributeName: widgetId
+                    - AttributeName: userId
                       KeyType: HASH
+                    - AttributeName: widgetId
+                      KeyType: RANGE
                 ProvisionedThroughput:
                     ReadCapacityUnits: 1
                     WriteCapacityUnits: 1

@@ -80,7 +80,7 @@ const Widget = React.forwardRef(
   )
 )
 
-const WidgetBuilder = () => {
+const WidgetBuilder = ({ userId }) => {
   const [typeOfJoy, setTypeOfJoy] = useState("")
   const apolloClient = useApolloClient()
 
@@ -98,6 +98,7 @@ const WidgetBuilder = () => {
       mutation: SAVE_WIDGET_QUERY,
       variables: {
         name: typeOfJoy,
+        userId,
         followupQuestions: JSON.stringify(followupQuestions),
       },
     })

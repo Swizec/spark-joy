@@ -35,7 +35,7 @@ const IndexPage = () => (
       <Login />
       {auth.isAuthenticated() ? (
         <>
-          <WidgetBuilder />
+          <WidgetBuilder userId={auth.getUser().sub} />
           <WidgetList />
         </>
       ) : null}
