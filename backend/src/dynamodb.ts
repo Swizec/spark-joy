@@ -23,6 +23,13 @@ interface GetItemParams {
 
 interface ScanItemsParams {
     TableName?: string;
+    FilterExpression?: string;
+    ExpressionAttributeNames?: {
+        [key: string]: string;
+    };
+    ExpressionAttributeValues?: {
+        [key: string]: string | number | undefined | null;
+    };
 }
 
 export const updateItem = async (

@@ -63,7 +63,7 @@ const VotePage = ({ pageContext }) => {
   const apolloClient = useApolloClient()
   const { widgetId, voteType, followupQuestions, name } = pageContext
   const [showThankYou, setShowThankYou] = useState(false)
-  const [voteId, setVoteId] = useState(uuidv4())
+  const [voteId, setVoteId] = useState()
 
   useEffect(() => {
     ;(async function() {

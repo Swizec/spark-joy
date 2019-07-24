@@ -22,7 +22,7 @@ const typeDefs = gql`
 
     type Query {
         widget(widgetId: String!): Widget
-        allWidget: [Widget]
+        allWidget(userId: String!): [Widget]
     }
 
     type VoteResult {

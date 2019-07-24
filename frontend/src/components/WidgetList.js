@@ -1,29 +1,27 @@
 import React from "react"
-import { useStaticQuery, graphql, Link } from "gatsby"
+import { Link } from "gatsby"
+import { useQuery } from "react-apollo-hooks"
 
-const WidgetList = () => {
-  const { widgetsapi } = useStaticQuery(
-    graphql`
-      query {
-        widgetsapi {
-          allWidget {
-            widgetId
-            name
-          }
-        }
-      }
-    `
-  )
+import { ALL_WIDGETS_QUERY } from "../queries"
 
-  return (
-    <ul>
-      {widgetsapi.allWidget.map(widget => (
-        <li key={widget.widgetId}>
-          <Link to={widget.widgetId}>{widget.name}</Link>
-        </li>
-      ))}
-    </ul>
-  )
+const WidgetList = ({ userId }) => {
+  const { widgets, error } = useQuery(ALL_WIDGETS_QUERY, {
+    variables: { userId },
+  })
+
+  console.log(widgets, error)
+
+  return "this is a list of widgets"
+
+  //   return (
+  //     <ul>
+  //       {widgetsapi.allWidget.map(widget => (
+  //         <li key={widget.widgetId}>
+  //           <Link to={widget.widgetId}>{widget.name}</Link>
+  //         </li>
+  //       ))}
+  //     </ul>
+  //   )
 }
 
 export default WidgetList

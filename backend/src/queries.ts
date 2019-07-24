@@ -13,8 +13,16 @@ export const widget = async (_: any, { widgetId }: { widgetId: string }) => {
     };
 };
 
-export const allWidget = async () => {
-    const result = await scanItems({});
+export const allWidget = async (_: any, { userId }: { userId: string }) => {
+    const result = await scanItems({
+        FilterExpression: "#user = :userId",
+        ExpressionAttributeNames: {
+            "#user": "userId"
+        },
+        ExpressionAttributeValues: {
+            ":userId": userId
+        }
+    });
 
     if (!result.Items) {
         return [];
