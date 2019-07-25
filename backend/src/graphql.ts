@@ -22,7 +22,7 @@ const typeDefs = gql`
 
     type Query {
         widget(widgetId: String!): Widget
-        allWidget(userId: String!): [Widget]
+        allWidget(userId: String): [Widget]
     }
 
     type VoteResult {
@@ -68,8 +68,8 @@ const resolvers = {
 };
 
 export const server = new ApolloServer({
-    typeDefs,
-    resolvers
+    typeDefs: typeDefs,
+    resolvers: resolvers
 });
 
 export const handler = server.createHandler({

@@ -13,16 +13,21 @@ export const widget = async (_: any, { widgetId }: { widgetId: string }) => {
     };
 };
 
-export const allWidget = async (_: any, { userId }: { userId: string }) => {
-    const result = await scanItems({
-        FilterExpression: "#user = :userId",
-        ExpressionAttributeNames: {
-            "#user": "userId"
-        },
-        ExpressionAttributeValues: {
-            ":userId": userId
-        }
-    });
+export const allWidget = async (_: any, { userId }: { userId?: string }) => {
+    // Query by userId if passed-in, otherwise return all widgets
+    const result = await scanItems(
+        userId
+            ? {
+                  FilterExpression: "#user = :userId",
+                  ExpressionAttributeNames: {
+                      "#user": "userId"
+                  },
+                  ExpressionAttributeValues: {
+                      ":userId": userId
+                  }
+              }
+            : {}
+    );
 
     if (!result.Items) {
         return [];
