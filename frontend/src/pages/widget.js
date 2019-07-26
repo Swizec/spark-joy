@@ -1,22 +1,29 @@
 import React, { useEffect, useReducer } from "react"
 import { useApolloClient } from "react-apollo-hooks"
 import { PacmanLoader } from "react-spinners"
-import { Card } from "rebass"
+import { Card, Heading } from "rebass"
+import { Link } from "gatsby"
 
-import { CentralColumn, Heading } from "../components/styles"
+import { CentralColumn } from "../components/styles"
 import theme from "../components/theme"
 
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
+import Auth from "../auth"
 
 import { WIDGET_QUERY } from "../queries"
 
+const auth = new Auth()
+
 async function getWidget({ widgetId, apolloClient }) {
+  const userId = auth.getUser().sub
+
   const result = await apolloClient.query({
     query: WIDGET_QUERY,
     variables: {
       widgetId: widgetId,
+      userId: userId,
     },
   })
 
@@ -90,7 +97,7 @@ const WidgetPage = ({ pageContext }) => {
     <Layout>
       <SEO title="Thank You" />
       <CentralColumn style={{ paddingTop: "2em" }}>
-        <Heading h2>Did {name} spark joy?</Heading>
+        <Heading>Did {name} spark joy?</Heading>
         <PacmanLoader
           sizeUnit={"px"}
           size={50}
@@ -98,6 +105,7 @@ const WidgetPage = ({ pageContext }) => {
           loading={loading}
         />
         {loading ? null : <Votes thumbsup={thumbsup} thumbsdown={thumbsdown} />}
+        <Link to="/">Back</Link>
       </CentralColumn>
     </Layout>
   )

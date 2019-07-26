@@ -22,7 +22,7 @@ const typeDefs = gql`
     }
 
     type Query {
-        widget(widgetId: String!): Widget
+        widget(userId: String!, widgetId: String!): Widget
         allWidget(userId: String): [Widget]
     }
 

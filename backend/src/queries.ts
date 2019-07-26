@@ -1,7 +1,10 @@
 import { getItem, scanItems } from "./dynamodb";
 
-export const widget = async (_: any, { widgetId }: { widgetId: string }) => {
-    const result = await getItem({ Key: { widgetId } });
+export const widget = async (
+    _: any,
+    { userId, widgetId }: { userId: string; widgetId: string }
+) => {
+    const result = await getItem({ Key: { userId, widgetId } });
 
     if (!result.Item) {
         return {};
