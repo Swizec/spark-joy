@@ -19,15 +19,20 @@ export const saveWidget = async (
         widgetId = uuidv4();
     }
 
+    // This works because we currently don't have a mechanism to update widgets
+    // Otherwise it would overwrite the timestamp
+    const createdAt = new Date().toISOString();
+
     const result = await updateItem({
         Key: { userId, widgetId },
         UpdateExpression:
-            "SET widgetName = :name, thumbsup = :thumbsup, thumbsdown = :thumbsdown, followupQuestions = :followupQuestions",
+            "SET widgetName = :name, thumbsup = :thumbsup, thumbsdown = :thumbsdown, followupQuestions = :followupQuestions, createdAt = :createdAt",
         ExpressionAttributeValues: {
             ":name": name,
             ":followupQuestions": followupQuestions,
             ":thumbsup": 0,
-            ":thumbsdown": 0
+            ":thumbsdown": 0,
+            ":createdAt": createdAt
         }
     });
 

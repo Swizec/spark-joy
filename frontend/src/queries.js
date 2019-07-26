@@ -70,6 +70,7 @@ export const ALL_WIDGETS_QUERY = gql `
       widgetId
       thumbsup
       thumbsdown
+      createdAt
       name
     }
   }

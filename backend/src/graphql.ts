@@ -7,6 +7,7 @@ const typeDefs = gql`
         name: String!
         userId: String!
         widgetId: String!
+        createdAt: String
         thumbsup: Int
         thumbsdown: Int
         followupQuestions: String

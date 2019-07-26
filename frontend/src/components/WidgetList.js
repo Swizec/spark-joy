@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "gatsby"
 import { useQuery } from "react-apollo-hooks"
-import { Heading, Box } from "rebass"
+import { Heading, Box, Text } from "rebass"
 
 import { ALL_WIDGETS_QUERY } from "../queries"
 
@@ -23,6 +23,11 @@ const WidgetList = ({ userId }) => {
               <small>
                 {widget.thumbsup} 👍 {widget.thumbsdown} 👎
               </small>
+              {widget.createdAt ? (
+                <Text fontSize={1}>
+                  {new Date(widget.createdAt).toLocaleString()}
+                </Text>
+              ) : null}
             </li>
           ))}
         </ul>
