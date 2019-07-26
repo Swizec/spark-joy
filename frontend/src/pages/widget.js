@@ -10,15 +10,11 @@ import theme from "../components/theme"
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
-import Auth from "../auth"
+import useAuth from "../auth"
 
 import { WIDGET_QUERY } from "../queries"
 
-const auth = new Auth()
-
-async function getWidget({ widgetId, apolloClient }) {
-  const userId = auth.getUser().sub
-
+async function getWidget({ userId, widgetId, apolloClient }) {
   const result = await apolloClient.query({
     query: WIDGET_QUERY,
     variables: {
@@ -32,6 +28,7 @@ async function getWidget({ widgetId, apolloClient }) {
 
 function useWidgetState({ widgetId, name }) {
   const apolloClient = useApolloClient()
+  const { userId } = useAuth()
 
   const [state, dispatch] = useReducer(
     (state, action) => {
@@ -51,6 +48,7 @@ function useWidgetState({ widgetId, name }) {
     dispatch({ type: "loading" })
     ;(async () => {
       const widget = await getWidget({
+        userId,
         widgetId,
         apolloClient,
       })

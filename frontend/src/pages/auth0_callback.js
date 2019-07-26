@@ -1,14 +1,12 @@
 import React, { useEffect } from "react"
 import { PacmanLoader } from "react-spinners"
 
-import Auth from "../auth"
+import useAuth from "../auth"
 import Layout from "../components/layout"
 
 const Auth0CallbackPage = () => {
-  useEffect(() => {
-    const auth = new Auth()
-    auth.handleAuthentication()
-  }, [])
+  const { handleAuthentication } = useAuth()
+  handleAuthentication()
 
   return (
     <Layout>

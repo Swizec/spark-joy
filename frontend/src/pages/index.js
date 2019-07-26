@@ -6,41 +6,41 @@ import { CentralColumn } from "../components/styles"
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
-import Auth from "../auth"
+import useAuth from "../auth"
 
 import WidgetBuilder from "../components/WidgetBuilder"
 import WidgetList from "../components/WidgetList"
 
-const auth = new Auth()
-
 // Move to actual component
 const Login = () => {
-  const { isAuthenticated } = auth
+  const { isAuthenticated, login, logout, user } = useAuth()
 
-  console.log(auth.getUser())
-
-  if (isAuthenticated()) {
-    return <Button onClick={auth.logout}>Logout {auth.getUserName()}</Button>
+  if (isAuthenticated) {
+    return <Button onClick={logout}>Logout {user.name}</Button>
   } else {
-    return <Button onClick={auth.login}>Login</Button>
+    return <Button onClick={login}>Login</Button>
   }
 }
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <CentralColumn style={{ paddingTop: "2em" }}>
-      <p>Did your thing spark joy? Ask the fans and get some feedback :)</p>
-      <p>Fill out the widget, export to HTML, insert anywhere. 👇</p>
-      <Login />
-      {auth.isAuthenticated() ? (
-        <>
-          <WidgetBuilder userId={auth.getUser().sub} />
-          <WidgetList userId={auth.getUser().sub} />
-        </>
-      ) : null}
-    </CentralColumn>
-  </Layout>
-)
+const IndexPage = () => {
+  const { isAuthenticated, userId } = useAuth()
+
+  return (
+    <Layout>
+      <SEO title="Home" />
+      <CentralColumn style={{ paddingTop: "2em" }}>
+        <p>Did your thing spark joy? Ask the fans and get some feedback :)</p>
+        <p>Fill out the widget, export to HTML, insert anywhere. 👇</p>
+        <Login />
+        {isAuthenticated ? (
+          <>
+            <WidgetBuilder userId={userId} />
+            <WidgetList userId={userId} />
+          </>
+        ) : null}
+      </CentralColumn>
+    </Layout>
+  )
+}
 
 export default IndexPage
