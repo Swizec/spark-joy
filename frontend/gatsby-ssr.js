@@ -11,9 +11,12 @@ import { ThemeProvider } from "styled-components"
 
 import { client } from "./src/apollo"
 import theme from "./src/components/theme"
+import { AuthContextProvider } from "./src/auth"
 
 export const wrapRootElement = ({ element }) => (
   <ApolloProvider client={client}>
-    <ThemeProvider theme={theme}>{element}</ThemeProvider>
+    <ThemeProvider theme={theme}>
+      <AuthContextProvider>{element}</AuthContextProvider>
+    </ThemeProvider>
   </ApolloProvider>
 )

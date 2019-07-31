@@ -1,11 +1,37 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext, useReducer } from "react"
 import Auth0 from "auth0-js"
 import { navigate } from "gatsby"
 
 const AUTH0_DOMAIN = "sparkjoy.auth0.com"
 const AUTH0_CLIENT_ID = "GGfO12E5R8iHPBPh87bym5b3gzmdaYY9"
 
-const useAuth = () => {
+const AuthContext = React.createContext(null)
+
+function authReducer(state, action) {
+  switch (action.type) {
+    case "login":
+      const { authResult, user } = action
+      const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
+
+      localStorage.setItem("access_token", authResult.accessToken)
+      localStorage.setItem("id_token", authResult.idToken)
+      localStorage.setItem("expires_at", JSON.stringify(expiresAt))
+      localStorage.setItem("user", JSON.stringify(user))
+
+      return { user, expiresAt }
+    case "logout":
+      localStorage.removeItem("access_token")
+      localStorage.removeItem("id_token")
+      localStorage.removeItem("expires_at")
+      localStorage.removeItem("user")
+
+      return { user: {}, expiresAt: null }
+    default:
+      return state
+  }
+}
+
+export const AuthContextProvider = ({ children }) => {
   const auth0 = new Auth0.WebAuth({
     domain: AUTH0_DOMAIN,
     clientID: AUTH0_CLIENT_ID,
@@ -15,28 +41,27 @@ const useAuth = () => {
     scope: "openid profile email",
   })
 
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
-  const [expiresAt, setExpiresAt] = useState(
-    JSON.parse(localStorage.getItem("expires_at"))
-  )
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [state, dispatch] = useReducer(authReducer, {
+    user: JSON.parse(localStorage.getItem("user")),
+    expiresAt: JSON.parse(localStorage.getItem("expires_at")),
+  })
 
-  useEffect(() => {
-    setIsAuthenticated(new Date().getTime() < expiresAt)
-  }, [expiresAt])
+  return (
+    <AuthContext.Provider value={[state, dispatch, auth0]}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+const useAuth = () => {
+  const [state, dispatch, auth0] = useContext(AuthContext)
 
   const login = () => {
     auth0.authorize()
   }
 
   const logout = () => {
-    localStorage.removeItem("access_token")
-    localStorage.removeItem("id_token")
-    localStorage.removeItem("expires_at")
-    localStorage.removeItem("user")
-
-    setUser({})
-    setExpiresAt(null)
+    dispatch({ type: "logout" })
 
     // Return to the homepage after logout.
     navigate("/")
@@ -55,31 +80,25 @@ const useAuth = () => {
   }
 
   const setSession = authResult => {
-    const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
-
-    localStorage.setItem("access_token", authResult.accessToken)
-    localStorage.setItem("id_token", authResult.idToken)
-    localStorage.setItem("expires_at", JSON.stringify(expiresAt))
-
     auth0.client.userInfo(authResult.accessToken, (err, user) => {
-      localStorage.setItem("user", JSON.stringify(user))
+      if (err) {
+        console.log(err)
+      } else {
+        dispatch({ type: "login", authResult, user })
+      }
 
-      setUser(user)
-      setExpiresAt(expiresAt)
-
-      // Return to the homepage after authentication.
       navigate("/")
     })
   }
 
-  //   const isAuthenticated = () => {
-  // return expiresAt && new Date().getTime() < expiresAt
-  //   }
+  const isAuthenticated = () => {
+    return state.expiresAt && new Date().getTime() < state.expiresAt
+  }
 
   return {
     isAuthenticated,
-    user,
-    userId: user ? user.sub : null,
+    user: state.user,
+    userId: state.user ? state.user.sub : null,
     login,
     logout,
     handleAuthentication,

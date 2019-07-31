@@ -15,7 +15,7 @@ import WidgetList from "../components/WidgetList"
 const Login = () => {
   const { isAuthenticated, login, logout, user } = useAuth()
 
-  if (isAuthenticated) {
+  if (isAuthenticated()) {
     return <Button onClick={logout}>Logout {user.name}</Button>
   } else {
     return <Button onClick={login}>Login</Button>
@@ -32,7 +32,7 @@ const IndexPage = () => {
         <p>Did your thing spark joy? Ask the fans and get some feedback :)</p>
         <p>Fill out the widget, export to HTML, insert anywhere. 👇</p>
         <Login />
-        {isAuthenticated ? (
+        {isAuthenticated() ? (
           <>
             <WidgetBuilder userId={userId} />
             <WidgetList userId={userId} />
