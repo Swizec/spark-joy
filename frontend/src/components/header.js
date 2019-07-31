@@ -2,8 +2,11 @@ import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
 import styled from "styled-components"
+import { Flex, Heading } from "rebass"
 
-import { CentralColumn, Heading } from "./styles"
+import { CentralColumn } from "./styles"
+import { UserHeader } from "../components/User"
+import useAuth from "../auth"
 
 const HeaderStyle = styled.header`
   background: rebeccapurple;
@@ -12,17 +15,21 @@ const HeaderStyle = styled.header`
 const Header = ({ siteTitle }) => (
   <HeaderStyle>
     <CentralColumn style={{ height: "100%" }}>
-      <Heading style={{ lineHeight: "70px" }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </Heading>
+      <Flex>
+        <Heading style={{ lineHeight: "70px" }} width={2 / 3}>
+          <Link
+            to="/"
+            style={{
+              color: `white`,
+              textDecoration: `none`,
+            }}
+          >
+            {siteTitle}
+          </Link>
+        </Heading>
+
+        <UserHeader />
+      </Flex>
     </CentralColumn>
   </HeaderStyle>
 )

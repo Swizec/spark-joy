@@ -10,17 +10,7 @@ import useAuth from "../auth"
 
 import WidgetBuilder from "../components/WidgetBuilder"
 import WidgetList from "../components/WidgetList"
-
-// Move to actual component
-const Login = () => {
-  const { isAuthenticated, login, logout, user } = useAuth()
-
-  if (isAuthenticated()) {
-    return <Button onClick={logout}>Logout {user.name}</Button>
-  } else {
-    return <Button onClick={login}>Login</Button>
-  }
-}
+import { Login } from "../components/User"
 
 const IndexPage = () => {
   const { isAuthenticated, userId } = useAuth()
@@ -31,7 +21,7 @@ const IndexPage = () => {
       <CentralColumn style={{ paddingTop: "2em" }}>
         <p>Did your thing spark joy? Ask the fans and get some feedback :)</p>
         <p>Fill out the widget, export to HTML, insert anywhere. 👇</p>
-        <Login />
+        {!isAuthenticated() ? <Login /> : null}
         {isAuthenticated() ? (
           <>
             <WidgetBuilder userId={userId} />
