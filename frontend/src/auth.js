@@ -4,6 +4,10 @@ import { navigate } from "gatsby"
 
 const AUTH0_DOMAIN = "sparkjoy.auth0.com"
 const AUTH0_CLIENT_ID = "GGfO12E5R8iHPBPh87bym5b3gzmdaYY9"
+const CALLBACK_DOMAIN =
+  typeof window !== "undefined"
+    ? window.location.host
+    : "https://spark-joy.netlify.com/"
 
 const AuthContext = React.createContext(null)
 
@@ -39,7 +43,7 @@ export const AuthContextProvider = ({ children }) => {
   const auth0 = new Auth0.WebAuth({
     domain: AUTH0_DOMAIN,
     clientID: AUTH0_CLIENT_ID,
-    redirectUri: "http://localhost:8000/auth0_callback",
+    redirectUri: `http://${CALLBACK_DOMAIN}/auth0_callback`,
     audience: `https://${AUTH0_DOMAIN}/api/v2/`,
     responseType: "token id_token",
     scope: "openid profile email",
