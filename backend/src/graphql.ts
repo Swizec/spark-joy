@@ -42,6 +42,7 @@ const typeDefs = gql`
             followupQuestions: String
         ): Widget
         widgetVote(
+            userId: String!
             widgetId: String!
             thumbsup: Boolean
             thumbsdown: Boolean

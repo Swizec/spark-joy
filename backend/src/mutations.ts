@@ -88,17 +88,23 @@ export const saveFeedback = async (
 export const widgetVote = async (
     _: any,
     {
+        userId,
         widgetId,
         thumbsup = false,
         thumbsdown = false
-    }: { widgetId: string; thumbsup?: boolean; thumbsdown?: boolean }
+    }: {
+        userId: string;
+        widgetId: string;
+        thumbsup?: boolean;
+        thumbsdown?: boolean;
+    }
 ) => {
     const voteId = uuidv4(),
         createdAt = new Date().toISOString(),
         voteType = thumbsup ? "thumbsup" : "thumbsdown";
 
     const widgetUpdateResult = await updateItem({
-        Key: { widgetId },
+        Key: { userId, widgetId },
         UpdateExpression:
             "SET thumbsup = thumbsup + :thumbsup, thumbsdown = thumbsdown + :thumbsdown",
         ExpressionAttributeValues: {

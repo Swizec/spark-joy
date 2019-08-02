@@ -20,10 +20,11 @@ const FullScreen = styled.div`
   text-align: center;
 `
 
-async function saveVote({ widgetId, voteType, apolloClient }) {
+async function saveVote({ userId, widgetId, voteType, apolloClient }) {
   return await apolloClient.mutate({
     mutation: WIDGET_VOTE_QUERY,
     variables: {
+      userId: userId,
       widgetId: widgetId,
       thumbsup: voteType === "thumbsup",
       thumbsdown: voteType === "thumbsdown",
@@ -61,13 +62,18 @@ const FormView = ({ voteType, onSubmit, followupQuestions, name }) => (
 
 const VotePage = ({ pageContext }) => {
   const apolloClient = useApolloClient()
-  const { widgetId, voteType, followupQuestions, name } = pageContext
+  const { userId, widgetId, voteType, followupQuestions, name } = pageContext
   const [showThankYou, setShowThankYou] = useState(false)
   const [voteId, setVoteId] = useState()
 
   useEffect(() => {
     ;(async function() {
-      const result = await saveVote({ widgetId, voteType, apolloClient })
+      const result = await saveVote({
+        userId,
+        widgetId,
+        voteType,
+        apolloClient,
+      })
       setVoteId(result.data.widgetVote.voteId)
     })()
   }, [])
