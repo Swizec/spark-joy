@@ -53,3 +53,16 @@ export const getCSS = node => {
 
   return styles
 }
+
+// Used to trigger a new Netlify build of our app
+function triggerSiteBuild() {
+  if (typeof window !== "undefined") {
+    if (!window.location.host.includes("localhost")) {
+      // Custom webhook URL from netlify dashboard
+      fetch("https://api.netlify.com/build_hooks/5d43ce9e88375f16cb65101d", {
+        method: "POST",
+        body: JSON.stringify({}),
+      })
+    }
+  }
+}

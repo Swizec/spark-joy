@@ -8,7 +8,7 @@ import { useApolloClient } from "react-apollo-hooks"
 
 import { Heading, Flex } from "./styles"
 
-import { copyToClipboard, getCSS } from "../utils"
+import { copyToClipboard, getCSS, triggerSiteBuild } from "../utils"
 import { SAVE_WIDGET_QUERY } from "../queries"
 
 const Input = styled.input`
@@ -102,6 +102,8 @@ const WidgetBuilder = ({ userId }) => {
         followupQuestions: JSON.stringify(followupQuestions),
       },
     })
+
+    triggerSiteBuild()
 
     const widgetRef = React.createRef()
 
