@@ -114,4 +114,7 @@ const VotePage = ({ pageContext }) => {
   )
 }
 
-export default VotePage
+export default ({ pageContext }) =>
+  pageContext.isCreatedByStatefulCreatePages ? null : (
+    <VotePage pageContext={pageContext} />
+  )

@@ -13,17 +13,21 @@ function authReducer(state, action) {
       const { authResult, user } = action
       const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
 
-      localStorage.setItem("access_token", authResult.accessToken)
-      localStorage.setItem("id_token", authResult.idToken)
-      localStorage.setItem("expires_at", JSON.stringify(expiresAt))
-      localStorage.setItem("user", JSON.stringify(user))
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem("access_token", authResult.accessToken)
+        localStorage.setItem("id_token", authResult.idToken)
+        localStorage.setItem("expires_at", JSON.stringify(expiresAt))
+        localStorage.setItem("user", JSON.stringify(user))
+      }
 
       return { user, expiresAt }
     case "logout":
-      localStorage.removeItem("access_token")
-      localStorage.removeItem("id_token")
-      localStorage.removeItem("expires_at")
-      localStorage.removeItem("user")
+      if (typeof localStorage !== "undefined") {
+        localStorage.removeItem("access_token")
+        localStorage.removeItem("id_token")
+        localStorage.removeItem("expires_at")
+        localStorage.removeItem("user")
+      }
 
       return { user: {}, expiresAt: null }
     default:
@@ -42,8 +46,14 @@ export const AuthContextProvider = ({ children }) => {
   })
 
   const [state, dispatch] = useReducer(authReducer, {
-    user: JSON.parse(localStorage.getItem("user")),
-    expiresAt: JSON.parse(localStorage.getItem("expires_at")),
+    user:
+      typeof localStorage !== "undefined"
+        ? JSON.parse(localStorage.getItem("user"))
+        : {},
+    expiresAt:
+      typeof localStorage !== "undefined"
+        ? JSON.parse(localStorage.getItem("expires_at"))
+        : null,
   })
 
   return (
