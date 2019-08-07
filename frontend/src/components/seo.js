@@ -55,7 +55,7 @@ function SEO({ description, lang, meta, title }) {
         },
         {
           property: "og:image",
-          content: thubmnail,
+          content: `https://spark-joy.netlify.com${thumbnail}`,
         },
         {
           property: "og:url",
@@ -79,7 +79,7 @@ function SEO({ description, lang, meta, title }) {
         },
         {
           property: "twitter:image",
-          content: thubmnail,
+          content: `https://spark-joy.netlify.com${thumbnail}`,
         },
       ].concat(meta)}
     >
