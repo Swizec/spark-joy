@@ -68,7 +68,9 @@ function SEO({ description, lang, meta, title }) {
           content: metaDescription,
         },
       ].concat(meta)}
-    />
+    >
+      <script async defer src="https://cdn.simpleanalytics.io/hello.js" />
+    </Helmet>
   )
 }
 

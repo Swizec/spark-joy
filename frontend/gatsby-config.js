@@ -3,8 +3,8 @@ const SERVER_URI =
 
 module.exports = {
   siteMetadata: {
-    title: `Spark Joy :)`,
-    description: `Ask your fans if what you shared sparked joy :)`,
+    title: `Spark Joy - get feedback on anything`,
+    description: `Stop wondering how you're doing, ask your fans`,
     author: `@swizec`,
   },
   plugins: [
@@ -40,6 +40,12 @@ module.exports = {
       },
     },
     `gatsby-plugin-styled-components`,
+    {
+      resolve: `gatsby-plugin-facebook-pixel`,
+      options: {
+        pixelId: "2068666223443197",
+      },
+    },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
