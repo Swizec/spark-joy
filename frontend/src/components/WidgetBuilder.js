@@ -80,8 +80,8 @@ const Widget = React.forwardRef(
   )
 )
 
-const WidgetBuilder = ({ userId }) => {
-  const [typeOfJoy, setTypeOfJoy] = useState("")
+const WidgetBuilder = ({ userId, name, editable = true }) => {
+  const [typeOfJoy, setTypeOfJoy] = useState(name)
   const apolloClient = useApolloClient()
 
   async function exportWidget() {
@@ -135,7 +135,7 @@ const WidgetBuilder = ({ userId }) => {
 
   return (
     <Layout>
-      <Widget editable value={typeOfJoy} update={setTypeOfJoy} />
+      <Widget editable={editable} value={typeOfJoy} update={setTypeOfJoy} />
       <Button bg="primary" onClick={exportWidget}>
         Export
       </Button>

@@ -11,6 +11,7 @@ import theme from "../components/theme"
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
+import WidgetBuilder from "../components/WidgetBuilder"
 
 import { WIDGET_QUERY } from "../queries"
 
@@ -41,7 +42,7 @@ function useWidgetState({ widgetId, name }) {
           return state
       }
     },
-    { name, thumbsup: 0, thumbsdown: 0, loading: false }
+    { widgetId, name, thumbsup: 0, thumbsdown: 0, loading: false }
   )
 
   useEffect(() => {
@@ -89,7 +90,11 @@ const Votes = ({ thumbsup, thumbsdown }) => (
 )
 
 const WidgetPage = ({ pageContext }) => {
-  const { name, thumbsup, thumbsdown, loading } = useWidgetState(pageContext)
+  const { widgetId, name, thumbsup, thumbsdown, loading } = useWidgetState(
+    pageContext
+  )
+
+  console.log(pageContext, { widgetId, name, thumbsup, thumbsdown, loading })
 
   return (
     <Layout>
@@ -103,6 +108,7 @@ const WidgetPage = ({ pageContext }) => {
           loading={loading}
         />
         {loading ? null : <Votes thumbsup={thumbsup} thumbsdown={thumbsdown} />}
+        <WidgetBuilder editable={false} widgetId={widgetId} name={name} />
         <Link to="/">Back</Link>
       </CentralColumn>
     </Layout>

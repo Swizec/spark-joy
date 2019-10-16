@@ -36,7 +36,7 @@ exports.createPages = ({ graphql, actions }) => {
     result.data.widgetsapi.allWidget.forEach(
       ({ userId, widgetId, name, followupQuestions }) => {
         const votePath = path.resolve("./src/pages/vote.js")
-        const widgetPath = path.resolve("./src/pages/widget.js")
+        const widgetPath = path.resolve("./src/pages/widget_admin.js")
 
         followupQuestions = JSON.parse(followupQuestions).sort(
           (a, b) => a.id - b.id
