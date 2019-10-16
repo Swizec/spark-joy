@@ -6,7 +6,6 @@ import { Flex, Heading } from "rebass"
 
 import { CentralColumn } from "./styles"
 import { UserHeader } from "../components/User"
-import useAuth from "../auth"
 
 const HeaderStyle = styled.header`
   background: rebeccapurple;

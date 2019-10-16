@@ -9474,6 +9474,13 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
+react-use-auth@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/react-use-auth/-/react-use-auth-0.5.0.tgz#c266bbb294cae0c85a97b4a2afe10addd59e5d8b"
+  integrity sha512-HFT5D51BzeSlX4+U+rE7UHFIg0VafLQeT84NXQJfDbs4c88meXTiEzyIwEacabKe1WrwLdlyaPSZwt/lWPJpnA==
+  dependencies:
+    auth0-js "^9.11.2"
+
 react@^16.8.6:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"

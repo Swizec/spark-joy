@@ -1,18 +1,16 @@
 import React from "react"
-import { Link } from "gatsby"
 import { Button, Heading, Text } from "rebass"
 import styled from "styled-components"
 import FadeIn from "react-lazyload-fadein"
+import { useAuth } from "react-use-auth"
 
 import Layout from "../components/layout"
 import { JoyGuyImage } from "../components/image"
 import SEO from "../components/seo"
-import useAuth from "../auth"
 import WidgetDemoGif from "../images/widget-demo.gif"
 
 import WidgetBuilder from "../components/WidgetBuilder"
 import WidgetList from "../components/WidgetList"
-import { Login } from "../components/User"
 import { Footer, CentralColumn } from "../components/styles"
 
 const FullScreen = styled.div`
@@ -91,7 +89,7 @@ const LandingPage = () => {
 }
 
 const IndexPage = () => {
-  const { isAuthenticated, userId } = useAuth()
+  const { isAuthenticated } = useAuth()
 
   return isAuthenticated() ? <HomePage /> : <LandingPage />
 }

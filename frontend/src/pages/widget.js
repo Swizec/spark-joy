@@ -3,6 +3,7 @@ import { useApolloClient } from "react-apollo-hooks"
 import { PacmanLoader } from "react-spinners"
 import { Card, Heading } from "rebass"
 import { Link } from "gatsby"
+import { useAuth } from "react-use-auth"
 
 import { CentralColumn } from "../components/styles"
 import theme from "../components/theme"
@@ -10,7 +11,6 @@ import theme from "../components/theme"
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
-import useAuth from "../auth"
 
 import { WIDGET_QUERY } from "../queries"
 

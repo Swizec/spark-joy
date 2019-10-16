@@ -1,7 +1,7 @@
 import React from "react"
-import { Button, Flex, Heading, Image, Text } from "rebass"
+import { Button, Flex, Image, Text } from "rebass"
 
-import useAuth from "../auth"
+import { useAuth } from "react-use-auth"
 
 // Move to actual component
 export const Login = () => {
