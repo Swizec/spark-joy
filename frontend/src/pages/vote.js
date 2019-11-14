@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useApolloClient } from "react-apollo-hooks"
 import styled from "styled-components"
 import { Heading } from "rebass"
-import uuidv4 from "uuid/v4"
 
-import Image from "../components/image"
 import SEO from "../components/seo"
 
 import { WIDGET_VOTE_QUERY, SAVE_WIDGET_FEEDBACK_QUERY } from "../queries"
@@ -21,6 +19,8 @@ const FullScreen = styled.div`
 `
 
 async function saveVote({ userId, widgetId, voteType, apolloClient }) {
+  const params = new URLSearchParams(window.location.search)
+
   return await apolloClient.mutate({
     mutation: WIDGET_VOTE_QUERY,
     variables: {
@@ -28,6 +28,8 @@ async function saveVote({ userId, widgetId, voteType, apolloClient }) {
       widgetId: widgetId,
       thumbsup: voteType === "thumbsup",
       thumbsdown: voteType === "thumbsdown",
+      voter: params.get("voter"),
+      instanceOfJoy: params.get("instanceOfJoy"),
     },
   })
 }
