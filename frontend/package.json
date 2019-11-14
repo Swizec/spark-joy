@@ -1,67 +1,66 @@
 {
-  "name": "spark-joy-frontend",
-  "private": true,
-  "description": "The frontend for the Spark Joy project",
-  "version": "0.1.0",
-  "author": "Swizec Teller <swizec@swizec.com>",
-  "dependencies": {
-    "apollo-boost": "^0.4.2",
-    "auth0-js": "^9.11.2",
-    "babel-plugin-styled-components": "^1.10.0",
-    "butter-toast": "^3.3.3",
-    "css": "^2.2.4",
-    "final-form": "^4.16.1",
-    "gatsby": "^2.5.7",
-    "gatsby-image": "^2.1.0",
-    "gatsby-plugin-facebook-pixel": "^1.0.3",
-    "gatsby-plugin-manifest": "^2.1.1",
-    "gatsby-plugin-offline": "^2.1.1",
-    "gatsby-plugin-react-helmet": "^3.0.12",
-    "gatsby-plugin-sharp": "^2.0.37",
-    "gatsby-plugin-styled-components": "^3.0.7",
-    "gatsby-source-filesystem": "^2.0.37",
-    "gatsby-source-graphql": "^2.0.18",
-    "gatsby-transformer-sharp": "^2.1.19",
-    "graphql-tag": "^2.10.1",
-    "isomorphic-fetch": "^2.2.1",
-    "prop-types": "^15.7.2",
-    "react": "^16.8.6",
-    "react-apollo": "^2.5.6",
-    "react-apollo-hooks": "^0.4.5",
-    "react-dom": "^16.8.6",
-    "react-final-form": "^6.3.0",
-    "react-helmet": "^5.2.1",
-    "react-lazyload-fadein": "^1.1.0",
-    "react-pose": "^4.0.8",
-    "react-spinners": "^0.5.4",
-    "react-use-auth": "^0.5.0",
-    "reakit": "^1.0.0-beta.1",
-    "rebass": "^3.1.0",
-    "styled-components": "^4.2.0",
-    "styled-system": "^5.0.12",
-    "styled-tools": "^1.7.1",
-    "uuid": "^3.3.2"
-  },
-  "devDependencies": {
-    "prettier": "^1.17.1"
-  },
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "MIT",
-  "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby develop",
-    "format": "prettier --write src/**/*.{js,jsx}",
-    "start": "npm run develop",
-    "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
-  }
+    "name": "spark-joy-frontend",
+    "private": true,
+    "description": "The frontend for the Spark Joy project",
+    "version": "0.1.0",
+    "author": "Swizec Teller <swizec@swizec.com>",
+    "dependencies": {
+        "apollo-boost": "^0.4.2",
+        "auth0-js": "^9.11.2",
+        "babel-plugin-styled-components": "^1.10.0",
+        "butter-toast": "^3.3.3",
+        "css": "^2.2.4",
+        "final-form": "^4.16.1",
+        "gatsby": "^2.5.7",
+        "gatsby-image": "^2.1.0",
+        "gatsby-plugin-facebook-pixel": "^1.0.3",
+        "gatsby-plugin-manifest": "^2.1.1",
+        "gatsby-plugin-offline": "^2.1.1",
+        "gatsby-plugin-react-helmet": "^3.0.12",
+        "gatsby-plugin-sharp": "^2.0.37",
+        "gatsby-plugin-styled-components": "^3.0.7",
+        "gatsby-source-filesystem": "^2.0.37",
+        "gatsby-source-graphql": "^2.0.18",
+        "gatsby-transformer-sharp": "^2.1.19",
+        "graphql-tag": "^2.10.1",
+        "isomorphic-fetch": "^2.2.1",
+        "prop-types": "^15.7.2",
+        "react": "^16.8.6",
+        "react-apollo": "^2.5.6",
+        "react-apollo-hooks": "^0.4.5",
+        "react-dom": "^16.8.6",
+        "react-final-form": "^6.3.0",
+        "react-helmet": "^5.2.1",
+        "react-lazyload-fadein": "^1.1.0",
+        "react-pose": "^4.0.8",
+        "react-spinners": "^0.5.4",
+        "react-use-auth": "^0.5.1",
+        "rebass": "^3.1.0",
+        "styled-components": "^4.2.0",
+        "styled-system": "^5.0.12",
+        "styled-tools": "^1.7.1",
+        "uuid": "^3.3.2"
+    },
+    "devDependencies": {
+        "prettier": "^1.17.1"
+    },
+    "keywords": [
+        "gatsby"
+    ],
+    "license": "MIT",
+    "scripts": {
+        "build": "gatsby build",
+        "develop": "gatsby develop",
+        "format": "prettier --write src/**/*.{js,jsx}",
+        "start": "npm run develop",
+        "serve": "gatsby serve",
+        "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    },
+    "bugs": {
+        "url": "https://github.com/gatsbyjs/gatsby/issues"
+    }
 }

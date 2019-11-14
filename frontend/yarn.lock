@@ -2176,11 +2176,6 @@ body-parser@1.19.0:
     raw-body "2.4.0"
     type-is "~1.6.17"
 
-body-scroll-lock@^2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/body-scroll-lock/-/body-scroll-lock-2.6.1.tgz#3782ff37404886faaee366968ceee40c3964d8f2"
-  integrity sha512-fsDsq10+BJrk/+eGADqxspyZpGiKSh3dK8ByE6KuDK0REmPB99U05p1t9xVTAM9J6j9PJGm6W/W+HsCPnOFj+Q==
-
 bonjour@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bonjour/-/bonjour-3.5.0.tgz#8e890a183d8ee9a2393b3844c691a42bcf7bc9f5"
@@ -8628,11 +8623,6 @@ popmotion@^8.6.2:
     stylefire "^4.1.3"
     tslib "^1.9.1"
 
-popper.js@^1.15.0:
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.15.0.tgz#5560b99bbad7647e9faa475c6b8056621f5a4ff2"
-  integrity sha512-w010cY1oCUmI+9KwwlWki+r5jxKfTFDVoadl7MSrIujHU5MJ5OR6HTDj6Xo8aoR/QsA56x8jKjA59qGH4ELtrA==
-
 portfinder@^1.0.20:
   version "1.0.20"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.20.tgz#bea68632e54b2e13ab7b0c4775e9b41bf270e44a"
@@ -9474,10 +9464,10 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react-use-auth@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/react-use-auth/-/react-use-auth-0.5.0.tgz#c266bbb294cae0c85a97b4a2afe10addd59e5d8b"
-  integrity sha512-HFT5D51BzeSlX4+U+rE7UHFIg0VafLQeT84NXQJfDbs4c88meXTiEzyIwEacabKe1WrwLdlyaPSZwt/lWPJpnA==
+react-use-auth@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/react-use-auth/-/react-use-auth-0.5.1.tgz#226d44c3d939a60f2b6d9da2ffae72fe0806db0e"
+  integrity sha512-93Z9ExoP0tyP94hp6a9CsrBtA48NYHnzddPqKMk/Xkl3u7osBwO9wFitq/6abgF2lvFnsGHJPU5fFUI00MtNyQ==
   dependencies:
     auth0-js "^9.11.2"
 
@@ -9585,14 +9575,6 @@ readdirp@^2.2.1:
     graceful-fs "^4.1.11"
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
-
-reakit@^1.0.0-beta.1:
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/reakit/-/reakit-1.0.0-beta.1.tgz#d5b798dfe492e990976f980981cc1d5ae4175bf4"
-  integrity sha512-uv9EQ4sUXnHCZ6pZlx9O0+56tFF8dYupehgyxDegak//IAvharnhoKuHu33qKN1+hqwK+2K4trcXqP55eDg6gA==
-  dependencies:
-    body-scroll-lock "^2.6.1"
-    popper.js "^1.15.0"
 
 rebass@^3.1.0:
   version "3.1.0"
