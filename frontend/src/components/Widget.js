@@ -43,25 +43,34 @@ const Question = styled(Heading)`
 `
 
 export const Widget = React.forwardRef(
-  ({ widgetId, editable, value, update }, ref) => (
-    <WidgetLayout ref={ref}>
-      <Question h2>
-        Did this{" "}
-        {editable ? (
-          <Input
-            type="text"
-            value={value}
-            onChange={event => update(event.target.value)}
-          />
-        ) : (
-          value
-        )}{" "}
-        spark joy?
-      </Question>
-      <Flex row>
-        <RoundButton href={`/${widgetId}/thumbsdown`}>👎</RoundButton>
-        <RoundButton href={`/${widgetId}/thumbsup`}>👍</RoundButton>
-      </Flex>
-    </WidgetLayout>
-  )
+  ({ widgetId, editable, value, update }, ref) => {
+    let domain = ""
+    if (typeof window !== "undefined") {
+      domain = `${window.location.protocol}//${window.location.host}`
+    }
+
+    return (
+      <WidgetLayout ref={ref}>
+        <Question h2>
+          Did this{" "}
+          {editable ? (
+            <Input
+              type="text"
+              value={value}
+              onChange={event => update(event.target.value)}
+            />
+          ) : (
+            value
+          )}{" "}
+          spark joy?
+        </Question>
+        <Flex row>
+          <RoundButton href={`${domain}/${widgetId}/thumbsdown`}>
+            👎
+          </RoundButton>
+          <RoundButton href={`${domain}/${widgetId}/thumbsup`}>👍</RoundButton>
+        </Flex>
+      </WidgetLayout>
+    )
+  }
 )
