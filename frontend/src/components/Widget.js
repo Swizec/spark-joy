@@ -65,10 +65,16 @@ export const Widget = React.forwardRef(
           spark joy?
         </Question>
         <Flex row>
-          <RoundButton href={`${domain}/${widgetId}/thumbsdown`}>
+          <RoundButton
+            href={`${domain}/${widgetId}/thumbsdown?voter={{ subscriber.email_address }}&instanceOfJoy=REPLACE_THIS`}
+          >
             👎
           </RoundButton>
-          <RoundButton href={`${domain}/${widgetId}/thumbsup`}>👍</RoundButton>
+          <RoundButton
+            href={`${domain}/${widgetId}/thumbsup?voter={{ subscriber.email_address }}&instanceOfJoy=REPLACE_THIS`}
+          >
+            👍
+          </RoundButton>
         </Flex>
       </WidgetLayout>
     )
