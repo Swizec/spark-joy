@@ -12,8 +12,8 @@ const Layout = styled.div`
   grid-template-rows: 1fr 0.2fr;
 `
 
-const WidgetBuilder = ({ userId, name, editable = true }) => {
-  const [typeOfJoy, setTypeOfJoy] = useState(name)
+const WidgetBuilder = ({ userId, widgetType, editable = true }) => {
+  const [typeOfJoy, setTypeOfJoy] = useState(widgetType)
 
   const exportWidget = useWidgetExporter({ typeOfJoy, userId })
 

@@ -4,7 +4,7 @@ import { widget, allWidget } from "./queries";
 
 const typeDefs = gql`
     type Widget {
-        name: String!
+        widgetType: String!
         userId: String!
         widgetId: String!
         createdAt: String
@@ -19,6 +19,8 @@ const typeDefs = gql`
         voteType: String!
         answers: String!
         createdAt: String
+        voter: String
+        instanceOfJoy: String
     }
 
     type Query {
@@ -27,16 +29,18 @@ const typeDefs = gql`
     }
 
     type VoteResult {
-        name: String!
+        widgetType: String!
         widgetId: String!
         followupQuestions: String
         voteId: String!
         createdAt: String
+        voter: String
+        instanceOfJoy: String
     }
 
     type Mutation {
         saveWidget(
-            name: String!
+            widgetType: String!
             userId: String!
             widgetId: String
             followupQuestions: String
@@ -46,6 +50,8 @@ const typeDefs = gql`
             widgetId: String!
             thumbsup: Boolean
             thumbsdown: Boolean
+            voter: String
+            instanceOfJoy: String
         ): VoteResult
         saveFeedback(
             widgetId: String!
@@ -53,6 +59,7 @@ const typeDefs = gql`
             voteType: String!
             answers: String!
             createdAt: String
+            instanceOfJoy: String
         ): Feedback
     }
 `;

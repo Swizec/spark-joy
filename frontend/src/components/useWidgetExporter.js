@@ -17,7 +17,7 @@ async function saveToBackend({
   const { data } = await apolloClient.mutate({
     mutation: SAVE_WIDGET_QUERY,
     variables: {
-      name: typeOfJoy,
+      widgetType: typeOfJoy,
       userId,
       followupQuestions: JSON.stringify(followupQuestions),
     },

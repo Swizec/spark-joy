@@ -11,8 +11,7 @@ export const widget = async (
     }
 
     return {
-        ...result.Item,
-        name: result.Item.widgetName
+        ...result.Item
     };
 };
 
@@ -37,7 +36,6 @@ export const allWidget = async (_: any, { userId }: { userId?: string }) => {
     }
 
     return result.Items.map(widget => ({
-        ...widget,
-        name: widget.widgetName
+        ...widget
     }));
 };

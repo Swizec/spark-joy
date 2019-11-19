@@ -27,7 +27,7 @@ async function getWidget({ userId, widgetId, apolloClient }) {
   return result.data.widget
 }
 
-function useWidgetState({ widgetId, name }) {
+function useWidgetState({ widgetId, widgetType }) {
   const apolloClient = useApolloClient()
   const { userId } = useAuth()
 
@@ -42,7 +42,7 @@ function useWidgetState({ widgetId, name }) {
           return state
       }
     },
-    { widgetId, name, thumbsup: 0, thumbsdown: 0, loading: false }
+    { widgetId, widgetType, thumbsup: 0, thumbsdown: 0, loading: false }
   )
 
   useEffect(() => {
@@ -90,17 +90,27 @@ const Votes = ({ thumbsup, thumbsdown }) => (
 )
 
 const WidgetPage = ({ pageContext }) => {
-  const { widgetId, name, thumbsup, thumbsdown, loading } = useWidgetState(
-    pageContext
-  )
+  const {
+    widgetId,
+    widgetType,
+    thumbsup,
+    thumbsdown,
+    loading,
+  } = useWidgetState(pageContext)
 
-  console.log(pageContext, { widgetId, name, thumbsup, thumbsdown, loading })
+  console.log(pageContext, {
+    widgetId,
+    widgetType,
+    thumbsup,
+    thumbsdown,
+    loading,
+  })
 
   return (
     <Layout>
       <SEO title="Thank You" />
       <CentralColumn style={{ paddingTop: "2em" }}>
-        <Heading>Did {name} spark joy?</Heading>
+        <Heading>Did {widgetType} spark joy?</Heading>
         <PacmanLoader
           sizeUnit={"px"}
           size={50}
@@ -108,7 +118,11 @@ const WidgetPage = ({ pageContext }) => {
           loading={loading}
         />
         {loading ? null : <Votes thumbsup={thumbsup} thumbsdown={thumbsdown} />}
-        <WidgetBuilder editable={false} widgetId={widgetId} name={name} />
+        <WidgetBuilder
+          editable={false}
+          widgetId={widgetId}
+          widgetType={widgetType}
+        />
         <Link to="/">Back</Link>
       </CentralColumn>
     </Layout>

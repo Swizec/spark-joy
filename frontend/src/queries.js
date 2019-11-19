@@ -1,14 +1,14 @@
 import gql from "graphql-tag"
 
-export const SAVE_WIDGET_QUERY = gql `
+export const SAVE_WIDGET_QUERY = gql`
   mutation saveWidget(
-    $name: String!
+    $widgetType: String!
     $userId: String!
     $widgetId: String
     $followupQuestions: String
   ) {
     saveWidget(
-      name: $name
+      widgetType: $widgetType
       userId: $userId
       widgetId: $widgetId
       followupQuestions: $followupQuestions
@@ -18,7 +18,7 @@ export const SAVE_WIDGET_QUERY = gql `
   }
 `
 
-export const SAVE_WIDGET_FEEDBACK_QUERY = gql `
+export const SAVE_WIDGET_FEEDBACK_QUERY = gql`
   mutation saveFeedback(
     $widgetId: String!
     $voteId: String!
@@ -38,7 +38,7 @@ export const SAVE_WIDGET_FEEDBACK_QUERY = gql `
   }
 `
 
-export const WIDGET_VOTE_QUERY = gql `
+export const WIDGET_VOTE_QUERY = gql`
   mutation widgetVote(
     $userId: String!
     $widgetId: String!
@@ -53,31 +53,31 @@ export const WIDGET_VOTE_QUERY = gql `
       thumbsup: $thumbsup
       thumbsdown: $thumbsdown
       voter: $voter
-      instanceOfJoy: $$instanceOfJoy
+      instanceOfJoy: $instanceOfJoy
     ) {
       voteId
     }
   }
 `
 
-export const WIDGET_QUERY = gql `
+export const WIDGET_QUERY = gql`
   query widget($userId: String!, $widgetId: String!) {
     widget(userId: $userId, widgetId: $widgetId) {
-      name
+      widgetType
       thumbsup
       thumbsdown
     }
   }
 `
 
-export const ALL_WIDGETS_QUERY = gql `
+export const ALL_WIDGETS_QUERY = gql`
   query allWidget($userId: String!) {
     allWidget(userId: $userId) {
       widgetId
+      widgetType
       thumbsup
       thumbsdown
       createdAt
-      name
     }
   }
 `

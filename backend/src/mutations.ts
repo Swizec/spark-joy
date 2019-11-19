@@ -4,12 +4,12 @@ import { updateItem } from "./dynamodb";
 export const saveWidget = async (
     _: any,
     {
-        name,
+        widgetType,
         userId,
         widgetId,
         followupQuestions
     }: {
-        name: string;
+        widgetType: string;
         userId: string;
         widgetId?: string;
         followupQuestions?: string;
@@ -26,9 +26,9 @@ export const saveWidget = async (
     const result = await updateItem({
         Key: { userId, widgetId },
         UpdateExpression:
-            "SET widgetName = :name, thumbsup = :thumbsup, thumbsdown = :thumbsdown, followupQuestions = :followupQuestions, createdAt = :createdAt",
+            "SET widgetType = :widgetType, thumbsup = :thumbsup, thumbsdown = :thumbsdown, followupQuestions = :followupQuestions, createdAt = :createdAt",
         ExpressionAttributeValues: {
-            ":name": name,
+            ":widgetType": widgetType,
             ":followupQuestions": followupQuestions,
             ":thumbsup": 0,
             ":thumbsdown": 0,
@@ -37,7 +37,7 @@ export const saveWidget = async (
     });
 
     return {
-        name,
+        widgetType,
         widgetId,
         followupQuestions,
         thumbsup: 0,
@@ -50,18 +50,22 @@ export const saveFeedback = async (
     {
         widgetId,
         voteId,
+        instanceOfJoy,
         voteType,
         answers,
-        createdAt
+        createdAt,
+        voter
     }: {
         widgetId: string;
         voteId: string;
+        instanceOfJoy: string;
         voteType: string;
         answers: any;
         createdAt: string;
+        voter: string;
     }
 ) => {
-    const fields = { voteType, answers, createdAt };
+    const fields = { instanceOfJoy, voter, voteType, answers, createdAt };
 
     const UpdateFields: string[] = Object.entries(fields)
         .filter(([key, val]) => val) // use only defined values
@@ -91,18 +95,24 @@ export const widgetVote = async (
         userId,
         widgetId,
         thumbsup = false,
-        thumbsdown = false
+        thumbsdown = false,
+        voter = "",
+        instanceOfJoy = ""
     }: {
         userId: string;
         widgetId: string;
         thumbsup?: boolean;
         thumbsdown?: boolean;
+        voter?: string;
+        instanceOfJoy?: string;
     }
 ) => {
     const voteId = uuidv4(),
         createdAt = new Date().toISOString(),
         voteType = thumbsup ? "thumbsup" : "thumbsdown";
 
+    // Saves vote per user:widget pair
+    // But now we need it separate for instances of widget types
     const widgetUpdateResult = await updateItem({
         Key: { userId, widgetId },
         UpdateExpression:
@@ -114,15 +124,16 @@ export const widgetVote = async (
         ReturnValues: "ALL_NEW"
     });
     const widget = widgetUpdateResult.Attributes || {};
-    widget.name = widget.widgetName;
 
     const feedback = await saveFeedback(
         {},
         {
             widgetId,
             voteId,
+            instanceOfJoy,
             createdAt,
             voteType,
+            voter,
             answers: {}
         }
     );

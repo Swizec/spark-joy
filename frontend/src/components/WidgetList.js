@@ -19,7 +19,7 @@ const WidgetList = ({ userId }) => {
         <ul>
           {allWidget.map(widget => (
             <li key={widget.widgetId}>
-              <Link to={widget.widgetId}>{widget.name}</Link> |{" "}
+              <Link to={widget.widgetId}>{widget.widgetType}</Link> |{" "}
               <small>
                 {widget.thumbsup} 👍 {widget.thumbsdown} 👎
               </small>

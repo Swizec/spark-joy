@@ -34,12 +34,14 @@ async function saveVote({ userId, widgetId, voteType, apolloClient }) {
   })
 }
 
-const VoteTypeHeading = ({ voteType, name }) =>
+const VoteTypeHeading = ({ voteType, widgetType }) =>
   voteType === "thumbsup" ? (
-    <Heading fontSize={[5, 6, 7]}>👍 you enjoyed Swizec's {name} 👍</Heading>
+    <Heading fontSize={[5, 6, 7]}>
+      👍 you enjoyed Swizec's {widgetType} 👍
+    </Heading>
   ) : (
     <Heading fontSize={[5, 6, 7]}>
-      👎 you didn't enjoy Swizec's {name} 👎
+      👎 you didn't enjoy Swizec's {widgetType} 👎
     </Heading>
   )
 
@@ -55,16 +57,22 @@ const ThankYouView = () => (
   </>
 )
 
-const FormView = ({ voteType, onSubmit, followupQuestions, name }) => (
+const FormView = ({ voteType, onSubmit, followupQuestions, widgetType }) => (
   <>
-    <VoteTypeHeading voteType={voteType} name={name} />
+    <VoteTypeHeading voteType={voteType} widgetType={widgetType} />
     <FullScreenForm onSubmit={onSubmit} followupQuestions={followupQuestions} />
   </>
 )
 
 const VotePage = ({ pageContext }) => {
   const apolloClient = useApolloClient()
-  const { userId, widgetId, voteType, followupQuestions, name } = pageContext
+  const {
+    userId,
+    widgetId,
+    voteType,
+    followupQuestions,
+    widgetType,
+  } = pageContext
   const [showThankYou, setShowThankYou] = useState(false)
   const [voteId, setVoteId] = useState()
 
@@ -106,7 +114,7 @@ const VotePage = ({ pageContext }) => {
           voteType={voteType}
           onSubmit={onSubmit}
           followupQuestions={followupQuestions}
-          name={name}
+          widgetType={widgetType}
         />
       )}
       <Footer>
