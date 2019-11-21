@@ -5,7 +5,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsc",
-        "deploy": "npm run build && sls deploy"
+        "deploy": "sh deploy.sh"
     },
     "repository": {
         "type": "git",

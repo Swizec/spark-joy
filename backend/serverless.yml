@@ -3,7 +3,7 @@ service: spark-joy
 provider:
     name: aws
     runtime: nodejs8.10
-    stage: dev
+    stage: ${opt:stage}
     environment:
         WIDGETS_TABLE: ${self:service}-widgets2-${self:provider.stage}
         FEEDBACKS_TABLE: ${self:service}-votes-${self:provider.stage}
