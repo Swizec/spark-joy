@@ -20,7 +20,7 @@ module.exports = {
       options: {
         typeName: "WIDGET",
         fieldName: "widgetsapi",
-        url: ENV_VARS["server_uri"],
+        url: ENV_VARS.server_uri,
         refetchInterval: 60,
       },
     },
