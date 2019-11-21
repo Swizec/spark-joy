@@ -1,5 +1,4 @@
-const SERVER_URI =
-  "https://ahe5za5z07.execute-api.us-east-1.amazonaws.com/dev/graphql"
+const ENV_VARS = require("./env-helper")
 
 module.exports = {
   siteMetadata: {
@@ -21,7 +20,7 @@ module.exports = {
       options: {
         typeName: "WIDGET",
         fieldName: "widgetsapi",
-        url: SERVER_URI,
+        url: ENV_VARS["server_uri"],
         refetchInterval: 60,
       },
     },

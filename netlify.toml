@@ -1,4 +1,13 @@
 # example netlify.toml
+[context.production.environment]
+    NODE_ENV = "prod"
+
+[context.deploy-preview.environment]
+    NODE_ENV = "dev"
+
+[context.branch-deploy]
+    NODE_ENV = "dev"
+
 [build]
   base = "frontend/"
   command = "yarn build"
