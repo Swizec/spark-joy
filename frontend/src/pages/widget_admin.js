@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react"
-import { useApolloClient } from "react-apollo-hooks"
+import { useApolloClient, useQuery } from "react-apollo-hooks"
 import { PacmanLoader } from "react-spinners"
 import { Card, Heading } from "rebass"
 import { Link } from "gatsby"
@@ -9,56 +9,10 @@ import { CentralColumn } from "../components/styles"
 import theme from "../components/theme"
 
 import Layout from "../components/layout"
-import Image from "../components/image"
 import SEO from "../components/seo"
 import WidgetBuilder from "../components/WidgetBuilder"
 
 import { WIDGET_QUERY } from "../queries"
-
-async function getWidget({ userId, widgetId, apolloClient }) {
-  const result = await apolloClient.query({
-    query: WIDGET_QUERY,
-    variables: {
-      widgetId: widgetId,
-      userId: userId,
-    },
-  })
-
-  return result.data.widget
-}
-
-function useWidgetState({ widgetId, widgetType }) {
-  const apolloClient = useApolloClient()
-  const { userId } = useAuth()
-
-  const [state, dispatch] = useReducer(
-    (state, action) => {
-      switch (action.type) {
-        case "loading":
-          return { ...state, loading: true }
-        case "loaded":
-          return { ...state, loading: false, ...action.widget }
-        default:
-          return state
-      }
-    },
-    { widgetId, widgetType, thumbsup: 0, thumbsdown: 0, loading: false }
-  )
-
-  useEffect(() => {
-    dispatch({ type: "loading" })
-    ;(async () => {
-      const widget = await getWidget({
-        userId,
-        widgetId,
-        apolloClient,
-      })
-      dispatch({ type: "loaded", widget })
-    })()
-  }, [])
-
-  return state
-}
 
 const Votes = ({ thumbsup, thumbsdown }) => (
   <>
@@ -89,40 +43,48 @@ const Votes = ({ thumbsup, thumbsdown }) => (
   </>
 )
 
-const WidgetPage = ({ pageContext }) => {
-  const {
-    widgetId,
-    widgetType,
-    thumbsup,
-    thumbsdown,
-    loading,
-  } = useWidgetState(pageContext)
+const WidgetState = ({ widgetId, widgetType, thumbsup, thumbsdown }) => (
+  <>
+    <Votes thumbsup={thumbsup} thumbsdown={thumbsdown} />
+    <WidgetBuilder
+      editable={false}
+      widgetId={widgetId}
+      widgetType={widgetType}
+    />
+  </>
+)
 
-  console.log(pageContext, {
-    widgetId,
-    widgetType,
-    thumbsup,
-    thumbsdown,
-    loading,
+const WidgetPage = ({ pageContext }) => {
+  const { userId } = useAuth()
+  const { loading, error, data } = useQuery(WIDGET_QUERY, {
+    variables: {
+      widgetId: pageContext.widgetId,
+      userId,
+    },
   })
+
+  const { widgetId, widgetType } = pageContext
 
   return (
     <Layout>
       <SEO title="Thank You" />
       <CentralColumn style={{ paddingTop: "2em" }}>
-        <Heading>Did {widgetType} spark joy?</Heading>
-        <PacmanLoader
-          sizeUnit={"px"}
-          size={50}
-          color={theme.colors.primary}
-          loading={loading}
-        />
-        {loading ? null : <Votes thumbsup={thumbsup} thumbsdown={thumbsdown} />}
-        <WidgetBuilder
-          editable={false}
-          widgetId={widgetId}
-          widgetType={widgetType}
-        />
+        <Heading>Did {pageContext.widgetType} spark joy?</Heading>
+
+        {loading || error ? (
+          <PacmanLoader
+            sizeUnit={"px"}
+            size={50}
+            color={theme.colors.primary}
+            loading={loading || !!error}
+          />
+        ) : (
+          <WidgetState
+            {...data.widget}
+            widgetId={widgetId}
+            widgetType={widgetType}
+          />
+        )}
         <Link to="/">Back</Link>
       </CentralColumn>
     </Layout>
