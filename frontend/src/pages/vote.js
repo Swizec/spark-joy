@@ -21,7 +21,16 @@ const FullScreen = styled.div`
 // Sends a vote to the backend
 // Locally stores data to prevent double-voting
 function useSaveVote({ userId, widgetId, voteType }) {
-  const [saveVote, { data }] = useMutation(WIDGET_VOTE_QUERY)
+  const [storageKey, setStorageKey] = useState("")
+  const [saveVote, { data }] = useMutation(WIDGET_VOTE_QUERY, {
+    onCompleted: () => {
+      // save vote type in unique local storage key
+      if (typeof localStorage !== "undefined") {
+        console.log("saving to localstorage", storageKey)
+        localStorage.setItem(storageKey, voteType)
+      }
+    },
+  })
 
   // save vote on page load
   useEffect(() => {
@@ -29,9 +38,9 @@ function useSaveVote({ userId, widgetId, voteType }) {
       typeof window !== "undefined"
         ? new URLSearchParams(window.location.search)
         : new Map()
-
     const instanceOfJoy = params.get("instanceOfJoy") || "undefined"
     const storageKey = `sparkJoy:voted:${widgetId}:${instanceOfJoy}`
+    setStorageKey(storageKey)
 
     // allow changing your vote, but not re-voting
     if (
@@ -47,15 +56,9 @@ function useSaveVote({ userId, widgetId, voteType }) {
           voter: params.get("voter"),
           instanceOfJoy,
         },
-        onCompleted: () => {
-          // save vote type in unique local storage key
-          if (typeof localStorage !== "undefined") {
-            console.log("saving to localstorage", storageKey)
-            localStorage.setItem(storageKey, voteType)
-          }
-        },
       })
     }
+    // }
   }, [])
 
   return data ? data.widgetVote.voteId : null
