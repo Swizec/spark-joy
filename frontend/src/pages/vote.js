@@ -21,38 +21,41 @@ const FullScreen = styled.div`
 // Sends a vote to the backend
 // Locally stores data to prevent double-voting
 function useSaveVote({ userId, widgetId, voteType }) {
-  const params = new URLSearchParams(window.location.search)
-  const instanceOfJoy = params.get("instanceOfJoy")
-  const storageKey = `sparkJoy:voted:${widgetId}:${instanceOfJoy}`
-
-  const [saveVote, { data }] = useMutation(WIDGET_VOTE_QUERY, {
-    variables: {
-      userId: userId,
-      widgetId: widgetId,
-      thumbsup: voteType === "thumbsup",
-      thumbsdown: voteType === "thumbsdown",
-      voter: params.get("voter"),
-      instanceOfJoy,
-    },
-    onCompleted: () => {
-      console.log("hai")
-      // save vote type in unique local storage key
-      if (typeof localStorage !== "undefined") {
-        console.log("saving to localstorage", storageKey)
-        localStorage.setItem(storageKey, voteType)
-      }
-    },
-  })
+  const [saveVote, { data }] = useMutation(WIDGET_VOTE_QUERY)
 
   // save vote on page load
   useEffect(() => {
+    const params =
+      typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search)
+        : new Map()
+
+    const instanceOfJoy = params.get("instanceOfJoy") || "undefined"
+    const storageKey = `sparkJoy:voted:${widgetId}:${instanceOfJoy}`
+
     // allow changing your vote, but not re-voting
-    if (typeof localStorage === "undefined") {
-      saveVote()
-    } else if (localStorage.getItem(storageKey) !== voteType) {
-      saveVote()
+    if (
+      typeof localStorage === "undefined" ||
+      localStorage.getItem(storageKey) !== voteType
+    ) {
+      saveVote({
+        variables: {
+          userId: userId,
+          widgetId: widgetId,
+          thumbsup: voteType === "thumbsup",
+          thumbsdown: voteType === "thumbsdown",
+          voter: params.get("voter"),
+          instanceOfJoy,
+        },
+        onCompleted: () => {
+          // save vote type in unique local storage key
+          if (typeof localStorage !== "undefined") {
+            console.log("saving to localstorage", storageKey)
+            localStorage.setItem(storageKey, voteType)
+          }
+        },
+      })
     }
-    // }
   }, [])
 
   return data ? data.widgetVote.voteId : null
