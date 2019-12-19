@@ -43,7 +43,7 @@ const Question = styled(Heading)`
 `
 
 export const Widget = React.forwardRef(
-  ({ widgetId, editable, value, update }, ref) => {
+  ({ widgetId, editable, value, onNameChange, instanceOfJoy }, ref) => {
     let domain = ""
     if (typeof window !== "undefined") {
       domain = `${window.location.protocol}//${window.location.host}`
@@ -57,7 +57,7 @@ export const Widget = React.forwardRef(
             <Input
               type="text"
               value={value}
-              onChange={event => update(event.target.value)}
+              onChange={event => onNameChange(event.target.value)}
             />
           ) : (
             value
@@ -66,12 +66,12 @@ export const Widget = React.forwardRef(
         </Question>
         <Flex row>
           <RoundButton
-            href={`${domain}/${widgetId}/thumbsdown?voter={{ subscriber.email_address }}&instanceOfJoy=REPLACE_THIS`}
+            href={`${domain}/${widgetId}/thumbsdown?voter={{ subscriber.email_address }}&instanceOfJoy=${instanceOfJoy}`}
           >
             👎
           </RoundButton>
           <RoundButton
-            href={`${domain}/${widgetId}/thumbsup?voter={{ subscriber.email_address }}&instanceOfJoy=REPLACE_THIS`}
+            href={`${domain}/${widgetId}/thumbsup?voter={{ subscriber.email_address }}&instanceOfJoy=${instanceOfJoy}`}
           >
             👍
           </RoundButton>

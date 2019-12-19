@@ -14,12 +14,25 @@ const Layout = styled.div`
 
 const WidgetBuilder = ({ userId, widgetType, editable = true }) => {
   const [typeOfJoy, setTypeOfJoy] = useState(widgetType)
+  const [instanceOfJoy, setInstanceOfJoy] = useState("")
 
   const exportWidget = useWidgetExporter({ typeOfJoy, userId })
 
   return (
     <Layout>
-      <Widget editable={editable} value={typeOfJoy} update={setTypeOfJoy} />
+      <Widget
+        editable={editable}
+        value={typeOfJoy}
+        instanceOfJoy={instanceOfJoy}
+        onNameChange={setTypeOfJoy}
+      />
+      <input
+        type="text"
+        name="instanceOfJoy"
+        value={instanceOfJoy}
+        onChange={ev => setInstanceOfJoy(ev.target.value)}
+        placeholder={`Which ${typeOfJoy} are you asking about?`}
+      />
       <Button bg="primary" onClick={exportWidget}>
         Export
       </Button>
