@@ -78,9 +78,12 @@ export function useWidgetExporter({
   // exports to clipboard
   // calls saveWidget if necessary
   return async function exportWidget() {
-    const _widgetId = saveOnExport
-      ? (await saveWidget()).saveWidget.widgetId
-      : widgetId
+    let _widgetId = widgetId
+
+    if (saveOnExport) {
+      const result = await saveWidget()
+      _widgetId = result.data.saveWidget.widgetId
+    }
 
     copyToClipboard(
       getWidgetHtml({

@@ -6,11 +6,11 @@ import { Heading, Box, Text } from "rebass"
 import { ALL_WIDGETS_QUERY } from "../queries"
 
 const WidgetList = ({ userId }) => {
-  const {
-    data: { allWidget },
-  } = useQuery(ALL_WIDGETS_QUERY, {
+  const { loading, data } = useQuery(ALL_WIDGETS_QUERY, {
     variables: { userId },
   })
+
+  const allWidget = data ? data.allWidget : null
 
   return (
     <Box mt={4}>
