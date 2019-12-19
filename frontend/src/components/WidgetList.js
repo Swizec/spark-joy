@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
-import { useQuery } from "react-apollo-hooks"
+import { useQuery } from "@apollo/react-hooks"
 import { Heading, Box, Text } from "rebass"
 
 import { ALL_WIDGETS_QUERY } from "../queries"

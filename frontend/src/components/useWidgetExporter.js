@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import { useApolloClient } from "react-apollo-hooks"
+import { useApolloClient } from "@apollo/react-hooks"
 import ButterToast, { Cinnamon } from "butter-toast"
 
 import { copyToClipboard, getCSS, triggerSiteBuild } from "../utils"

@@ -6,7 +6,7 @@
 
 // You can delete this file if you're not using it
 import React from "react"
-import { ApolloProvider } from "react-apollo-hooks"
+import { ApolloProvider } from "@apollo/react-hooks"
 import { ThemeProvider } from "styled-components"
 import { navigate } from "gatsby"
 

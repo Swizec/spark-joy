@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react"
-import { useApolloClient, useQuery } from "react-apollo-hooks"
+import { useApolloClient, useQuery } from "@apollo/react-hooks"
 import { PacmanLoader } from "react-spinners"
 import { Card, Heading } from "rebass"
 import { Link } from "gatsby"

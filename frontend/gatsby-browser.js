@@ -5,7 +5,7 @@
  */
 
 import React from "react"
-import { ApolloProvider } from "react-apollo-hooks"
+import { ApolloProvider } from "@apollo/react-hooks"
 import { ThemeProvider } from "styled-components"
 import { AuthProvider } from "react-use-auth"
 import { navigate } from "gatsby"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useApolloClient } from "react-apollo-hooks"
+import { useApolloClient, useMutation } from "@apollo/react-hooks"
 import styled from "styled-components"
 import { Heading } from "rebass"
 
@@ -18,20 +18,44 @@ const FullScreen = styled.div`
   text-align: center;
 `
 
-async function saveVote({ userId, widgetId, voteType, apolloClient }) {
+// Sends a vote to the backend
+// Locally stores data to prevent double-voting
+function useSaveVote({ userId, widgetId, voteType }) {
   const params = new URLSearchParams(window.location.search)
+  const instanceOfJoy = params.get("instanceOfJoy")
+  const storageKey = `sparkJoy:voted:${widgetId}:${instanceOfJoy}`
 
-  return await apolloClient.mutate({
-    mutation: WIDGET_VOTE_QUERY,
+  const [saveVote, { data }] = useMutation(WIDGET_VOTE_QUERY, {
     variables: {
       userId: userId,
       widgetId: widgetId,
       thumbsup: voteType === "thumbsup",
       thumbsdown: voteType === "thumbsdown",
       voter: params.get("voter"),
-      instanceOfJoy: params.get("instanceOfJoy"),
+      instanceOfJoy,
+    },
+    onCompleted: () => {
+      console.log("hai")
+      // save vote type in unique local storage key
+      if (typeof localStorage !== "undefined") {
+        console.log("saving to localstorage", storageKey)
+        localStorage.setItem(storageKey, voteType)
+      }
     },
   })
+
+  // save vote on page load
+  useEffect(() => {
+    // allow changing your vote, but not re-voting
+    if (typeof localStorage === "undefined") {
+      saveVote()
+    } else if (localStorage.getItem(storageKey) !== voteType) {
+      saveVote()
+    }
+    // }
+  }, [])
+
+  return data ? data.widgetVote.voteId : null
 }
 
 const VoteTypeHeading = ({ voteType, widgetType }) =>
@@ -73,20 +97,9 @@ const VotePage = ({ pageContext }) => {
     followupQuestions,
     widgetType,
   } = pageContext
-  const [showThankYou, setShowThankYou] = useState(false)
-  const [voteId, setVoteId] = useState()
 
-  useEffect(() => {
-    ;(async function() {
-      const result = await saveVote({
-        userId,
-        widgetId,
-        voteType,
-        apolloClient,
-      })
-      setVoteId(result.data.widgetVote.voteId)
-    })()
-  }, [])
+  const [showThankYou, setShowThankYou] = useState(false)
+  const voteId = useSaveVote({ userId, widgetId, voteType })
 
   async function onSubmit(answers) {
     if (Object.values(answers).length >= followupQuestions.length) {
