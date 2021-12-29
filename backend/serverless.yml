@@ -52,8 +52,10 @@ functions:
                       Fn::GetAtt:
                           - JoyFeedbacksTable
                           - StreamArn
-                  # smol batches for now, see if noisy
-                  batchSize: 3
+                  # we update records when users add answers
+                  # hopefully this reduces noise
+                  batchSize: 5
+                  MaximumBatchingWindowInSeconds: 60
 
 resources:
     Resources:
