@@ -18,6 +18,9 @@
     },
     "homepage": "https://github.com/Swizec/spark-joy#readme",
     "dependencies": {
+        "@aws-sdk/client-dynamodb": "^3.45.0",
+        "@aws-sdk/types": "^3.40.0",
+        "@aws-sdk/util-dynamodb": "^3.45.0",
         "@types/aws-lambda": "^8.10.26",
         "@types/graphql": "^14.2.0",
         "@types/uuid": "^3.4.4",

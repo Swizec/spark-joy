@@ -54,6 +54,7 @@ functions:
                           - StreamArn
                   # we update records when users add answers
                   # hopefully this reduces noise
+                  # (it didn't)
                   batchSize: 5
                   MaximumBatchingWindowInSeconds: 60
 

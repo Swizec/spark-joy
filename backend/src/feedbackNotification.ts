@@ -1,3 +1,5 @@
+import { AttributeValue } from "@aws-sdk/client-dynamodb";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { DynamoDBRecord, DynamoDBStreamEvent } from "aws-lambda";
 
 type Vote = {
@@ -33,28 +35,6 @@ async function sendNotification(vote: Vote): Promise<void> {
     // const message = buildMessage(record);
 }
 
-// transforms an event record to a vote
-function recordToVote(record: DynamoDBRecord): Vote {
-    if (!record.dynamodb?.NewImage) {
-        throw new Error("Invalid DB record");
-    }
-
-    // this feels like I'm missing a util library
-    return {
-        createdAt: record.dynamodb.NewImage.createdAt.S
-            ? new Date(record.dynamodb?.NewImage?.createdAt.S)
-            : null,
-        voteType: record.dynamodb.NewImage.voteType.S,
-        widgetId: record.dynamodb.NewImage.widgetId.S,
-        answers: record.dynamodb.NewImage.answers.S
-            ? JSON.parse(record.dynamodb.NewImage.answers.S)
-            : null,
-        instanceOfJoy: record.dynamodb.NewImage.instanceOfJoy.S,
-        voteId: record.dynamodb.NewImage.voteId.S,
-        voter: record.dynamodb.NewImage.voter.S,
-    };
-}
-
 export async function handler(event: DynamoDBStreamEvent) {
     const votes = new Map();
 
@@ -63,7 +43,16 @@ export async function handler(event: DynamoDBStreamEvent) {
     // https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html
     for (const record of event.Records) {
         if (shouldNotify(record)) {
-            const vote = recordToVote(record);
+            // shouldNotify guarantees NewImage is defined
+            const vote = unmarshall(
+                record.dynamodb!.NewImage! as {
+                    [key: string]: AttributeValue;
+                }
+            );
+            if (typeof vote.answers === "string") {
+                vote.answers = JSON.parse(vote.answers);
+            }
+
             votes.set(vote.voteId, vote);
         }
     }
