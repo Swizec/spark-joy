@@ -2,7 +2,7 @@ service: spark-joy
 
 provider:
     name: aws
-    runtime: nodejs8.10
+    runtime: nodejs14.x
     stage: ${opt:stage}
     environment:
         WIDGETS_TABLE: ${self:service}-widgets2-${self:provider.stage}
@@ -24,7 +24,10 @@ provider:
               - dynamodb:GetItem
               - dynamodb:PutItem
               - dynamodb:UpdateItem
-              - dynamodb:DeleteItem
+              - dynamodb:DescribeStream
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:ListStreams
           Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FEEDBACKS_TABLE}"
 
 functions:
@@ -39,6 +42,18 @@ functions:
                   path: graphql
                   method: POST
                   cors: true
+
+    feedbackNotification:
+        handler: dist/feedbackNotification.handler
+        events:
+            - stream:
+                  type: dynamodb
+                  arn:
+                      Fn::GetAtt:
+                          - JoyFeedbacksTable
+                          - StreamArn
+                  # smol batches for now, see if noisy
+                  batchSize: 3
 
 resources:
     Resources:
@@ -76,3 +91,5 @@ resources:
                     ReadCapacityUnits: 1
                     WriteCapacityUnits: 1
                 TableName: ${self:provider.environment.FEEDBACKS_TABLE}
+                StreamSpecification:
+                    StreamViewType: NEW_IMAGE
