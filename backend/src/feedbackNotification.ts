@@ -1,10 +1,15 @@
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { DynamoDBRecord, DynamoDBStreamEvent } from "aws-lambda";
+import { IncomingWebhook } from "@slack/webhook";
+import {
+    GetSecretValueCommand,
+    SecretsManagerClient,
+} from "@aws-sdk/client-secrets-manager";
 
 type Vote = {
     createdAt: Date | null;
-    voteType?: string;
+    voteType?: "thumbsup" | "thumbsdown";
     widgetId?: string;
     answers: string | null;
     instanceOfJoy?: string;
@@ -30,9 +35,47 @@ function shouldNotify(record: DynamoDBRecord): boolean {
 //     // if (record
 // }
 
+// reads slack webhook url from secrets manager
+async function getSlackUrl() {
+    const client = new SecretsManagerClient({
+        region: "us-east-1",
+    });
+    const command = new GetSecretValueCommand({
+        SecretId: "sparkjoySlackWebhook",
+    });
+
+    const secret = await client.send(command);
+
+    if (!secret.SecretString) {
+        throw new Error("Failed to read Slack Webhook URL");
+    }
+
+    return JSON.parse(secret.SecretString) as { webhookUrl: string };
+}
+
 async function sendNotification(vote: Vote): Promise<void> {
     console.log("Gonna send notification for", vote);
-    // const message = buildMessage(record);
+
+    const { webhookUrl } = await getSlackUrl();
+    const webhook = new IncomingWebhook(webhookUrl);
+
+    if (vote.voteType === "thumbsup") {
+        await webhook.send({
+            text: `Yay _${
+                vote.instanceOfJoy
+            }_ got a 👍 with answers \`${JSON.stringify(vote.answers)}\` from ${
+                vote.voter
+            }`,
+        });
+    } else {
+        await webhook.send({
+            text: `Womp _${
+                vote.instanceOfJoy
+            }_ got a 👎 with answers \`${JSON.stringify(vote.answers)}\` from ${
+                vote.voter
+            }`,
+        });
+    }
 }
 
 export async function handler(event: DynamoDBStreamEvent) {

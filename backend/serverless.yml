@@ -29,6 +29,16 @@ provider:
               - dynamodb:GetShardIterator
               - dynamodb:ListStreams
           Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FEEDBACKS_TABLE}"
+        - Effect: Allow
+          Action:
+              - secretsmanager:GetSecretValue
+          Resource:
+              - Fn::Join:
+                    - ":"
+                    - - arn:aws:secretsmanager
+                      - Ref: AWS::Region
+                      - Ref: AWS::AccountId
+                      - secret:*
 
 functions:
     graphql:
