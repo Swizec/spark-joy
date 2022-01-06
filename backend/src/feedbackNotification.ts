@@ -121,8 +121,6 @@ export async function handler(event: DynamoDBStreamEvent) {
         const voteRecord = parseRecord(record);
 
         if (shouldNotify(voteRecord)) {
-            // shouldNotify guarantees NewImage is defined
-
             votes.set(voteRecord.vote.voteId, voteRecord.vote);
         }
     }
