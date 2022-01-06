@@ -85,6 +85,10 @@ function renderField({ index, id, label, type }) {
 export const FullScreenForm = ({ onSubmit, followupQuestions }) => {
   const [fieldIndex, setFieldIndex] = useState(0)
 
+  if (!followupQuestions) {
+    return "Thanks!"
+  }
+
   function handleSubmit(values) {
     onSubmit(values)
     if (fieldIndex < followupQuestions.length) {
