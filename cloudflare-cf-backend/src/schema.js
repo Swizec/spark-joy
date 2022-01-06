@@ -1,26 +1,63 @@
 const { gql } = require('apollo-server-cloudflare')
 
 module.exports = gql`
-  type PokemonSprites {
-    front_default: String!
-    front_shiny: String!
-    front_female: String!
-    front_shiny_female: String!
-    back_default: String!
-    back_shiny: String!
-    back_female: String!
-    back_shiny_female: String!
+  type Widget {
+    widgetType: String!
+    userId: String!
+    widgetId: String!
+    createdAt: String
+    thumbsup: Int
+    thumbsdown: Int
+    followupQuestions: String
   }
 
-  type Pokemon {
-    id: ID!
-    name: String!
-    height: Int!
-    weight: Int!
-    sprites: PokemonSprites!
+  type Feedback {
+    widgetId: String!
+    voteId: String!
+    voteType: String!
+    answers: String!
+    createdAt: String
+    voter: String
+    instanceOfJoy: String
   }
 
   type Query {
-    pokemon(id: ID!): Pokemon
+    widget(userId: String!, widgetId: String!): Widget
+    allWidget(userId: String): [Widget]
+  }
+
+  type VoteResult {
+    widgetType: String!
+    widgetId: String!
+    followupQuestions: String
+    voteId: String!
+    createdAt: String
+    voter: String
+    instanceOfJoy: String
+  }
+
+  type Mutation {
+    saveWidget(
+      widgetType: String!
+      userId: String!
+      widgetId: String
+      followupQuestions: String
+    ): Widget
+    widgetVote(
+      userId: String!
+      widgetId: String!
+      thumbsup: Boolean
+      thumbsdown: Boolean
+      voter: String
+      instanceOfJoy: String
+    ): VoteResult
+    saveFeedback(
+      widgetId: String!
+      voteId: String!
+      voteType: String!
+      answers: String!
+      createdAt: String
+      instanceOfJoy: String
+    ): Feedback
   }
 `
