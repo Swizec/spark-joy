@@ -2,14 +2,15 @@ const { DynamoDBDataSource } = require('apollo-datasource-dynamodb')
 
 class WidgetsTable extends DynamoDBDataSource {
   constructor(config) {
-    super(this.tableName, this.tableKeySchema, config)
-
-    this.tableName = WIDGETS_TABLE
-    this.tableKeySchema = [
+    const tableName = WIDGETS_TABLE
+    const keySchema = [
       { AttributeName: 'userId', AttributeType: 'S' },
       { AttributeName: 'widgetId', AttributeType: 'S' },
     ]
-    this.ttl = 30 * 60 // 30 minutes
+
+    super(tableName, keySchema, config)
+
+    this.ttl = 30 * 60 // 30min
   }
 
   async getWidget(userId, widgetId) {

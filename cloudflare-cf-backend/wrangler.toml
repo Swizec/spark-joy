@@ -17,9 +17,7 @@ compatibility_date = "2022-01-06"
 
 [vars]
 AWS_REGION = "us-east-1"
-
 ## Must match naming in backend/serverless.yml
-[env.dev.vars]
 WIDGETS_TABLE = "spark-joy-widgets2-dev"
 FEEDBACKS_TABLE = "spark-joy-votes-dev"
 

@@ -8,12 +8,9 @@ const resolvers = require('../resolvers')
 const typeDefs = require('../schema')
 const WidgetsTable = require('../datasources/widgetsTable')
 
-console.log(AWS_ACCESS_KEY_ID)
-
 const dataSources = () => ({
   widgetsTable: new WidgetsTable({
     region: AWS_REGION,
-
     // created with wrangler secrets
     accessKeyId: AWS_ACCESS_KEY_ID,
     secretAccessKey: AWS_SECRET_ACCESS_KEY,
@@ -28,6 +25,7 @@ const createServer = (graphQLOptions) =>
     resolvers,
     introspection: true,
     dataSources,
+    debug: true,
     ...(graphQLOptions.kvCache ? kvCache : {}),
   })
 
