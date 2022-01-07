@@ -35,29 +35,29 @@ module.exports = gql`
     voter: String
     instanceOfJoy: String
   }
-`
 
-//   type Mutation {
-//     saveWidget(
-//       widgetType: String!
-//       userId: String!
-//       widgetId: String
-//       followupQuestions: String
-//     ): Widget
-//     widgetVote(
-//       userId: String!
-//       widgetId: String!
-//       thumbsup: Boolean
-//       thumbsdown: Boolean
-//       voter: String
-//       instanceOfJoy: String
-//     ): VoteResult
-//     saveFeedback(
-//       widgetId: String!
-//       voteId: String!
-//       voteType: String!
-//       answers: String!
-//       createdAt: String
-//       instanceOfJoy: String
-//     ): Feedback
-//   }
+  type Mutation {
+    saveWidget(
+      widgetType: String!
+      userId: String!
+      widgetId: String
+      followupQuestions: String
+    ): Widget
+    widgetVote(
+      userId: String!
+      widgetId: String!
+      thumbsup: Boolean
+      thumbsdown: Boolean
+      voter: String
+      instanceOfJoy: String
+    ): VoteResult
+    saveFeedback(
+      widgetId: String!
+      voteId: String!
+      voteType: String!
+      answers: String!
+      createdAt: String
+      instanceOfJoy: String
+    ): Feedback
+  }
+`

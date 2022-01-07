@@ -4,6 +4,7 @@ const {
   DynamoDBDocumentClient,
   GetCommand,
   ScanCommand,
+  UpdateCommand,
 } = require('@aws-sdk/lib-dynamodb')
 
 // using aws-sdk v3 instead of v2
@@ -43,6 +44,16 @@ class DynamoDBDataSource extends DataSource {
     const result = await this.client.send(command)
 
     return result.Items
+  }
+
+  async update(updateInput) {
+    const command = new UpdateCommand({
+      TableName: this.tableName,
+      ReturnValues: 'ALL_NEW',
+      ...updateInput,
+    })
+    const result = await this.client.send(command)
+    return result.Attributes
   }
 }
 

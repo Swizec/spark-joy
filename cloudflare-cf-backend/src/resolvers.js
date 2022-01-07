@@ -7,4 +7,9 @@ module.exports = {
       return dataSources.widgetsTable.getAllWidgets(userId)
     },
   },
+  Mutation: {
+    saveWidget: async (_source, props, { dataSources }) => {
+      return dataSources.widgetsTable.saveWidget(props)
+    },
+  },
 }

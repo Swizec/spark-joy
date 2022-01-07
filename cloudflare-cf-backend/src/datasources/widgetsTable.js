@@ -1,4 +1,5 @@
 const { DynamoDBDataSource } = require('./DynamoDBDataSource')
+const uuidv4 = require('uuid/v4')
 
 class WidgetsTable extends DynamoDBDataSource {
   constructor(config) {
@@ -31,6 +32,37 @@ class WidgetsTable extends DynamoDBDataSource {
       },
       ttl: this.ttl,
     })
+  }
+
+  async saveWidget({ widgetType, userId, widgetId, followupQuestions }) {
+    if (!widgetId) {
+      widgetId = uuidv4()
+    }
+
+    // This works because we currently don't have a mechanism to update widgets
+    // Otherwise it would overwrite the timestamp
+    const createdAt = new Date().toISOString()
+
+    const result = await this.update({
+      Key: { userId, widgetId },
+      UpdateExpression:
+        'SET widgetType = :widgetType, thumbsup = :thumbsup, thumbsdown = :thumbsdown, followupQuestions = :followupQuestions, createdAt = :createdAt',
+      ExpressionAttributeValues: {
+        ':widgetType': widgetType,
+        ':followupQuestions': followupQuestions,
+        ':thumbsup': 0,
+        ':thumbsdown': 0,
+        ':createdAt': createdAt,
+      },
+    })
+
+    return {
+      widgetType,
+      widgetId,
+      followupQuestions,
+      thumbsup: 0,
+      thumbsdown: 0,
+    }
   }
 }
 

@@ -10,7 +10,8 @@
     "apollo-datasource-dynamodb": "^1.1.0",
     "apollo-datasource-rest": "^3.2.0",
     "apollo-server-cloudflare": "^3.3.0",
-    "graphql": "^15.6.0"
+    "graphql": "^15.6.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "prettier": "^2.4.1",
