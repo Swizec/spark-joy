@@ -1,7 +1,12 @@
 module.exports = {
   Query: {
-    pokemon: async (_source, { id }, { dataSources }) => {
-      return dataSources.pokemonAPI.getPokemon(id)
+    widget: async (_source, { userId, widgetId }, { dataSources }) => {
+      return {}
+      //   return dataSources.widgetsTable.getWidget(userId, widgetId)
+    },
+    allWidget: async (_source, { userId }, { dataSources }) => {
+      return []
+      //   return dataSources.widgetsTable.getAllWidgets(userId)
     },
   },
 }
