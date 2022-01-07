@@ -1,4 +1,10 @@
 const { DynamoDBDataSource } = require('apollo-datasource-dynamodb')
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb')
+const {
+  DynamoDBDocumentClient,
+  ScanCommand,
+  GetCommand,
+} = require('@aws-sdk/lib-dynamodb')
 
 class WidgetsTable extends DynamoDBDataSource {
   constructor(config) {
@@ -8,37 +14,42 @@ class WidgetsTable extends DynamoDBDataSource {
       { AttributeName: 'widgetId', AttributeType: 'S' },
     ]
 
-    super(tableName, keySchema, config)
+    // need @aws-sdk v3 client because of XMLHttpRequest
+    const client = new DynamoDBClient(config)
+    const docClient = DynamoDBDocumentClient.from(client)
+
+    super(tableName, keySchema, config, docClient)
 
     this.ttl = 30 * 60 // 30min
   }
 
   async getWidget(userId, widgetId) {
-    return this.getItem(
-      {
-        TableName: this.tableName,
-        ConsistentRead: true,
-        Key: { userId, widgetId },
-      },
-      this.ttl,
-    )
+    const command = new GetCommand({
+      TableName: this.tableName,
+      ConsistentRead: true,
+      Key: { userId, widgetId },
+      ttl: this.ttl,
+    })
+    const result = await this.dynamoDbDocClient.send(command)
+    return result.Item
   }
 
   async getAllWidgets(userId) {
-    return this.scan(
-      {
-        TableName: this.tableName,
-        ConsistentRead: true,
-        FilterExpression: '#user = :userId',
-        ExpressionAttributeNames: {
-          '#user': 'userId',
-        },
-        ExpressionAttributeValues: {
-          ':userId': userId,
-        },
+    const command = new ScanCommand({
+      TableName: this.tableName,
+      ConsistentRead: true,
+      FilterExpression: '#user = :userId',
+      ExpressionAttributeNames: {
+        '#user': 'userId',
       },
-      this.ttl,
-    )
+      ExpressionAttributeValues: {
+        ':userId': userId,
+      },
+      ttl: this.ttl,
+    })
+    const result = await this.dynamoDbDocClient.send(command)
+
+    return result.Items
   }
 }
 
