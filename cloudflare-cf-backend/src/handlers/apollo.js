@@ -7,9 +7,18 @@ const KVCache = require('../kv-cache')
 const resolvers = require('../resolvers')
 const typeDefs = require('../schema')
 const WidgetsTable = require('../datasources/widgetsTable')
+const FeedbacksTable = require('../datasources/feedbacksTable')
 
 const dataSources = () => ({
   widgetsTable: new WidgetsTable({
+    region: AWS_REGION,
+    // created with wrangler secrets
+    credentials: {
+      accessKeyId: AWS_ACCESS_KEY_ID,
+      secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    },
+  }),
+  feedbacksTable: new FeedbacksTable({
     region: AWS_REGION,
     // created with wrangler secrets
     credentials: {

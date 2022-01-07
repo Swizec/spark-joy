@@ -64,6 +64,18 @@ class WidgetsTable extends DynamoDBDataSource {
       thumbsdown: 0,
     }
   }
+
+  async addWidgetVote({ userId, widgetId, thumbsup, thumbsdown }) {
+    return this.update({
+      Key: { userId, widgetId },
+      UpdateExpression:
+        'SET thumbsup = thumbsup + :thumbsup, thumbsdown = thumbsdown + :thumbsdown',
+      ExpressionAttributeValues: {
+        ':thumbsup': thumbsup ? 1 : 0,
+        ':thumbsdown': thumbsdown ? 1 : 0,
+      },
+    })
+  }
 }
 
 module.exports = WidgetsTable
