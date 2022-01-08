@@ -22,16 +22,22 @@ class WidgetsTable extends DynamoDBDataSource {
   }
 
   async getAllWidgets(userId) {
-    return this.scan({
-      FilterExpression: '#user = :userId',
-      ExpressionAttributeNames: {
-        '#user': 'userId',
-      },
-      ExpressionAttributeValues: {
-        ':userId': userId,
-      },
-      ttl: this.ttl,
-    })
+    if (userId) {
+      return this.scan({
+        FilterExpression: '#user = :userId',
+        ExpressionAttributeNames: {
+          '#user': 'userId',
+        },
+        ExpressionAttributeValues: {
+          ':userId': userId,
+        },
+        ttl: this.ttl,
+      })
+    } else {
+      return this.scan({
+        ttl: this.ttl,
+      })
+    }
   }
 
   async saveWidget({ widgetType, userId, widgetId, followupQuestions }) {

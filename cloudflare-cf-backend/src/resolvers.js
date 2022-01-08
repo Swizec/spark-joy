@@ -15,8 +15,13 @@ module.exports = {
       return dataSources.feedbacksTable.updateFeedback(props)
     },
     widgetVote: async (_source, props, { dataSources }) => {
-      const feedback = dataSources.feedbacksTable.createFeedback(props)
-      const widget = dataSources.widgetsTable.addWidgetVote(props)
+      const feedback = await dataSources.feedbacksTable.createFeedback(props)
+      const widget = await dataSources.widgetsTable.addWidgetVote(props)
+
+      return {
+        ...feedback,
+        ...widget,
+      }
     },
   },
 }

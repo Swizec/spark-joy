@@ -31,6 +31,7 @@ class FeedbacksTable extends DynamoDBDataSource {
       instanceOfJoy,
       voter,
       voteType,
+      createdAt,
     })
   }
 
@@ -43,7 +44,13 @@ class FeedbacksTable extends DynamoDBDataSource {
     createdAt,
     voter,
   }) {
-    const fields = { instanceOfJoy, voter, voteType, answers, createdAt }
+    const fields = {
+      instanceOfJoy,
+      voter,
+      voteType,
+      answers,
+      createdAt,
+    }
 
     const UpdateFields = Object.entries(fields)
       .filter(([key, val]) => val) // use only defined values
