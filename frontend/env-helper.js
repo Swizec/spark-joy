@@ -6,7 +6,7 @@ function getEnvVars(currentEnvironment) {
     case "prod":
       return {
         server_uri:
-          "https://uhusvdpvmk.execute-api.us-east-1.amazonaws.com/prod/graphql",
+          "https://da3d0kd2r9.execute-api.us-east-1.amazonaws.com/graphql",
       }
 
     case "dev":
@@ -14,7 +14,10 @@ function getEnvVars(currentEnvironment) {
     default:
       return {
         server_uri:
-          "https://ahe5za5z07.execute-api.us-east-1.amazonaws.com/dev/graphql",
+          //   "https://ahe5za5z07.execute-api.us-east-1.amazonaws.com/dev/graphql",
+          // https://56v8170tv6.execute-api.us-east-1.amazonaws.com/graphql
+          "https://cloudflare-cf-backend.swizec8760.workers.dev",
+        //   "http://0.0.0.0:8787",
       }
   }
 }
