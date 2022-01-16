@@ -7,6 +7,8 @@ provider:
     environment:
         WIDGETS_TABLE: ${self:service}-widgets2-${self:provider.stage}
         FEEDBACKS_TABLE: ${self:service}-votes-${self:provider.stage}
+    httpApi:
+        cors: true
     iamRoleStatements:
         - Effect: Allow
           Action:
@@ -43,13 +45,14 @@ provider:
 functions:
     graphql:
         handler: dist/graphql.handler
+        memorySize: 1024
         events:
-            - http:
-                  path: graphql
+            - httpApi:
+                  path: /graphql
                   method: GET
                   cors: true
-            - http:
-                  path: graphql
+            - httpApi:
+                  path: /graphql
                   method: POST
                   cors: true
 
