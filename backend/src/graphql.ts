@@ -29,10 +29,8 @@ const typeDefs = gql`
     }
 
     type VoteResult {
-        widgetType: String!
-        widgetId: String!
-        followupQuestions: String
         voteId: String!
+        followupQuestions: String
         createdAt: String
         voter: String
         instanceOfJoy: String
@@ -67,23 +65,23 @@ const typeDefs = gql`
 const resolvers = {
     Query: {
         widget,
-        allWidget
+        allWidget,
     },
     Mutation: {
         saveWidget,
         widgetVote,
-        saveFeedback
-    }
+        saveFeedback,
+    },
 };
 
 export const server = new ApolloServer({
     typeDefs: typeDefs,
-    resolvers: resolvers
+    resolvers: resolvers,
 });
 
 export const handler = server.createHandler({
     cors: {
         origin: "*",
-        credentials: true
-    }
+        credentials: true,
+    },
 });
