@@ -29,8 +29,10 @@ const typeDefs = gql`
     }
 
     type VoteResult {
-        voteId: String!
+        widgetType: String!
+        widgetId: String!
         followupQuestions: String
+        voteId: String!
         createdAt: String
         voter: String
         instanceOfJoy: String

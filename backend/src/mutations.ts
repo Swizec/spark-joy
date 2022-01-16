@@ -113,17 +113,17 @@ export const widgetVote = async (
 
     // Saves vote per user:widget pair
     // But now we need it separate for instances of widget types
-    // const widgetUpdateResult = await updateItem({
-    //     Key: { userId, widgetId },
-    //     UpdateExpression:
-    //         "SET thumbsup = thumbsup + :thumbsup, thumbsdown = thumbsdown + :thumbsdown",
-    //     ExpressionAttributeValues: {
-    //         ":thumbsup": thumbsup ? 1 : 0,
-    //         ":thumbsdown": thumbsdown ? 1 : 0
-    //     },
-    //     ReturnValues: "ALL_NEW"
-    // });
-    // const widget = widgetUpdateResult.Attributes || {};
+    const widgetUpdateResult = await updateItem({
+        Key: { userId, widgetId },
+        UpdateExpression:
+            "SET thumbsup = thumbsup + :thumbsup, thumbsdown = thumbsdown + :thumbsdown",
+        ExpressionAttributeValues: {
+            ":thumbsup": thumbsup ? 1 : 0,
+            ":thumbsdown": thumbsdown ? 1 : 0,
+        },
+        ReturnValues: "ALL_NEW",
+    });
+    const widget = widgetUpdateResult.Attributes || {};
 
     const feedback = await saveFeedback(
         {},
@@ -139,7 +139,7 @@ export const widgetVote = async (
     );
 
     return {
-        // ...widget,
+        ...widget,
         ...feedback,
     };
 };
