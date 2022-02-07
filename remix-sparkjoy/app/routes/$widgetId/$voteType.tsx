@@ -98,10 +98,14 @@ export default function FeedbackRoute() {
                     ? `👍 You liked Swizec's ${data.widget.widgetType} 👍`
                     : `👎 You didn't like Swizec's ${data.widget.widgetType} 👎`}
             </h1>
-            <form>
+            <form
+                method="post"
+                action={`/${data.widget.widgetId}/saveFeedback`}
+            >
                 {data.widget.followupQuestions.map((q) => (
                     <Question {...q} key={q.id} />
                 ))}
+                <button type="submit">Submit</button>
             </form>
         </>
     );
