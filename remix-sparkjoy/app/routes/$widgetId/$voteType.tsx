@@ -2,14 +2,22 @@ import { LoaderFunction, useLoaderData } from "remix";
 import { gql, GraphQLClient } from "graphql-request";
 
 type LoaderData = {
-    followupQuestions: FollowupQuestion[];
+    widget: Widget;
+    voteType: "thumbsup" | "thumbsdown";
+};
+
+type UnparsedWidget = {
+    userId: string;
+    widgetId: string;
+    widgetType: string;
+    followupQuestions: string;
 };
 
 type Widget = {
     userId: string;
     widgetId: string;
     widgetType: string;
-    followupQuestions: string;
+    followupQuestions: FollowupQuestion[];
 };
 
 type FollowupQuestion = {
@@ -23,9 +31,7 @@ const client = new GraphQLClient(
 );
 
 // TODO: add support for fetching individual widgetId on server
-async function fetchFollowupQuestions(
-    widgetId: string
-): Promise<FollowupQuestion[]> {
+async function fetchWidget(widgetId: string): Promise<Widget | null> {
     const query = gql`
         query {
             allWidget {
@@ -37,17 +43,20 @@ async function fetchFollowupQuestions(
         }
     `;
 
-    const data: { allWidget: Widget[] } = await client.request(query);
+    const data: { allWidget: UnparsedWidget[] } = await client.request(query);
 
     const widget = data.allWidget.find(
         (widget) => widget.widgetId === widgetId
     );
 
     if (widget) {
-        return JSON.parse(widget.followupQuestions);
+        return {
+            ...widget,
+            followupQuestions: JSON.parse(widget.followupQuestions as string),
+        };
+    } else {
+        return null;
     }
-
-    return [];
 }
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -55,10 +64,11 @@ export const loader: LoaderFunction = async ({ params }) => {
         return null;
     }
 
-    const followupQuestions = await fetchFollowupQuestions(params.widgetId);
+    const widget = await fetchWidget(params.widgetId);
 
     return {
-        followupQuestions,
+        widget,
+        voteType: params.voteType,
     };
 };
 
@@ -75,10 +85,17 @@ export default function FeedbackRoute() {
     const data = useLoaderData<LoaderData>();
 
     return (
-        <form>
-            {data.followupQuestions.map((q) => (
-                <Question {...q} />
-            ))}
-        </form>
+        <>
+            <h1>
+                {data.voteType === "thumbsup"
+                    ? `👍 You liked Swizec's ${data.widget.widgetType} 👍`
+                    : `👎 You didn't like Swizec's ${data.widget.widgetType} 👎`}
+            </h1>
+            <form>
+                {data.widget.followupQuestions.map((q) => (
+                    <Question {...q} key={q.id} />
+                ))}
+            </form>
+        </>
     );
 }
