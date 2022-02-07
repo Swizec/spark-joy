@@ -66,6 +66,13 @@ export const loader: LoaderFunction = async ({ params }) => {
 
     const widget = await fetchWidget(params.widgetId);
 
+    if (
+        !widget ||
+        (params.voteType !== "thumbsup" && params.voteType !== "thumbsdown")
+    ) {
+        throw new Response("Not found", { status: 404 });
+    }
+
     return {
         widget,
         voteType: params.voteType,
