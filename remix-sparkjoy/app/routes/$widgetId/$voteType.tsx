@@ -4,6 +4,7 @@ import { gql, GraphQLClient } from "graphql-request";
 type LoaderData = {
     widget: Widget;
     voteType: "thumbsup" | "thumbsdown";
+    voteId: string;
 };
 
 type UnparsedWidget = {
@@ -30,20 +31,22 @@ const client = new GraphQLClient(
     "https://56v8170tv6.execute-api.us-east-1.amazonaws.com/graphql"
 );
 
+const fetchWidgetQuery = gql`
+    query {
+        allWidget {
+            userId
+            widgetId
+            widgetType
+            followupQuestions
+        }
+    }
+`;
+
 // TODO: add support for fetching individual widgetId on server
 async function fetchWidget(widgetId: string): Promise<Widget | null> {
-    const query = gql`
-        query {
-            allWidget {
-                userId
-                widgetId
-                widgetType
-                followupQuestions
-            }
-        }
-    `;
-
-    const data: { allWidget: UnparsedWidget[] } = await client.request(query);
+    const data: { allWidget: UnparsedWidget[] } = await client.request(
+        fetchWidgetQuery
+    );
 
     const widget = data.allWidget.find(
         (widget) => widget.widgetId === widgetId
@@ -59,34 +62,34 @@ async function fetchWidget(widgetId: string): Promise<Widget | null> {
     }
 }
 
+const saveVoteMutation = gql`
+    mutation widgetVote(
+        $userId: String!
+        $widgetId: String!
+        $thumbsup: Boolean
+        $thumbsdown: Boolean
+        $voter: String
+        $instanceOfJoy: String
+    ) {
+        widgetVote(
+            userId: $userId
+            widgetId: $widgetId
+            thumbsup: $thumbsup
+            thumbsdown: $thumbsdown
+            voter: $voter
+            instanceOfJoy: $instanceOfJoy
+        ) {
+            voteId
+        }
+    }
+`;
+
 async function saveVote(
     widget: Widget,
     voteType: "thumbsup" | "thumbsdown",
-    voter?: string,
-    instanceOfJoy?: string
+    voter?: string | null,
+    instanceOfJoy?: string | null
 ) {
-    const mutation = gql`
-        mutation widgetVote(
-            $userId: String!
-            $widgetId: String!
-            $thumbsup: Boolean
-            $thumbsdown: Boolean
-            $voter: String
-            $instanceOfJoy: String
-        ) {
-            widgetVote(
-                userId: $userId
-                widgetId: $widgetId
-                thumbsup: $thumbsup
-                thumbsdown: $thumbsdown
-                voter: $voter
-                instanceOfJoy: $instanceOfJoy
-            ) {
-                voteId
-            }
-        }
-    `;
-
     const variables = {
         userId: widget.userId,
         widgetId: widget.widgetId,
@@ -96,13 +99,12 @@ async function saveVote(
         instanceOfJoy,
     };
 
-    console.log(variables);
+    const data: { widgetVote: { voteId: string } } = await client.request(
+        saveVoteMutation,
+        variables
+    );
 
-    const data: { voteId: string } = await client.request(mutation, variables);
-
-    console.log(data);
-
-    return data.voteId;
+    return data.widgetVote.voteId;
 }
 
 export const loader: LoaderFunction = async ({ params, request }) => {
@@ -136,6 +138,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
     return {
         widget,
         voteType: params.voteType,
+        voteId,
     };
 };
 
@@ -165,6 +168,10 @@ export default function FeedbackRoute() {
                 {data.widget.followupQuestions.map((q) => (
                     <Question {...q} key={q.id} />
                 ))}
+
+                <input type="hidden" name="voteId" value={data.voteId} />
+                <input type="hidden" name="voteType" value={data.voteType} />
+
                 <button type="submit">Submit</button>
             </form>
         </>
