@@ -59,19 +59,79 @@ async function fetchWidget(widgetId: string): Promise<Widget | null> {
     }
 }
 
-export const loader: LoaderFunction = async ({ params }) => {
-    if (!params.widgetId) {
-        return null;
-    }
+async function saveVote(
+    widget: Widget,
+    voteType: "thumbsup" | "thumbsdown",
+    voter?: string,
+    instanceOfJoy?: string
+) {
+    const mutation = gql`
+        mutation widgetVote(
+            $userId: String!
+            $widgetId: String!
+            $thumbsup: Boolean
+            $thumbsdown: Boolean
+            $voter: String
+            $instanceOfJoy: String
+        ) {
+            widgetVote(
+                userId: $userId
+                widgetId: $widgetId
+                thumbsup: $thumbsup
+                thumbsdown: $thumbsdown
+                voter: $voter
+                instanceOfJoy: $instanceOfJoy
+            ) {
+                voteId
+            }
+        }
+    `;
 
-    const widget = await fetchWidget(params.widgetId);
+    const variables = {
+        userId: widget.userId,
+        widgetId: widget.widgetId,
+        thumbsup: voteType === "thumbsup",
+        thumbsdown: voteType === "thumbsdown",
+        voter,
+        instanceOfJoy,
+    };
 
+    console.log(variables);
+
+    const data: { voteId: string } = await client.request(mutation, variables);
+
+    console.log(data);
+
+    return data.voteId;
+}
+
+export const loader: LoaderFunction = async ({ params, request }) => {
+    // 404 if wrong URL
     if (
-        !widget ||
+        !params.widgetId ||
         (params.voteType !== "thumbsup" && params.voteType !== "thumbsdown")
     ) {
         throw new Response("Not found", { status: 404 });
     }
+
+    // fetches metadata about the thing that was feedbacked
+    const widget = await fetchWidget(params.widgetId);
+    if (!widget) {
+        throw new Response("Not found", { status: 404 });
+    }
+
+    // get query params
+    const url = new URL(request.url);
+    const voter = url.searchParams.get("voter");
+    const instanceOfJoy = url.searchParams.get("instanceOfJoy");
+
+    // saves initial thumbsup/down vote
+    const voteId = await saveVote(
+        widget,
+        params.voteType,
+        voter,
+        instanceOfJoy
+    );
 
     return {
         widget,
