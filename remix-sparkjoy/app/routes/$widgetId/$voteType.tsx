@@ -83,7 +83,7 @@ const Question = (props: FollowupQuestion) => {
     return (
         <div>
             <label>{props.label}</label>
-            <input type="text"></input>
+            <input type="text" name={`field_${props.id}`}></input>
         </div>
     );
 };
