@@ -7,6 +7,9 @@ import {
     ScrollRestoration,
 } from "remix";
 import type { MetaFunction } from "remix";
+import { system } from "@theme-ui/presets";
+import { ThemeProvider } from "theme-ui";
+import { jsx, InitializeColorMode } from "theme-ui";
 
 export const meta: MetaFunction = () => {
     return { title: "Sparking Joy" };
@@ -23,9 +26,14 @@ export default function App() {
                 />
                 <Meta />
                 <Links />
+                {typeof document === "undefined"
+                    ? jsx(InitializeColorMode, { key: "theme-ui-no-flash" })
+                    : null}
             </head>
             <body>
-                <Outlet />
+                <ThemeProvider theme={system}>
+                    <Outlet />
+                </ThemeProvider>
                 <ScrollRestoration />
                 <Scripts />
                 {process.env.NODE_ENV === "development" && <LiveReload />}
