@@ -8,12 +8,20 @@ import {
 } from "remix";
 import type { MetaFunction } from "remix";
 import { system } from "@theme-ui/presets";
-import { ThemeProvider } from "theme-ui";
+import { merge, ThemeProvider } from "theme-ui";
 import { jsx, InitializeColorMode } from "theme-ui";
 
 export const meta: MetaFunction = () => {
     return { title: "Sparking Joy" };
 };
+
+const theme = merge(system, {
+    sizes: {
+        container: 1024,
+    },
+});
+
+console.log(theme);
 
 export default function App() {
     return (
@@ -31,7 +39,7 @@ export default function App() {
                     : null}
             </head>
             <body>
-                <ThemeProvider theme={system}>
+                <ThemeProvider theme={theme}>
                     <Outlet />
                 </ThemeProvider>
                 <ScrollRestoration />

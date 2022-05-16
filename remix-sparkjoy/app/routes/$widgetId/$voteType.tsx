@@ -1,5 +1,6 @@
 import { LoaderFunction, useLoaderData } from "remix";
 import { gql, GraphQLClient } from "graphql-request";
+import { Button, Container, Heading, Input, Label } from "theme-ui";
 
 type LoaderData = {
     widget: Widget;
@@ -143,11 +144,13 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 };
 
 const Question = (props: FollowupQuestion) => {
+    const fieldName = `field_${props.id}`;
+
     return (
-        <div>
-            <label>{props.label}</label>
-            <input type="text" name={`field_${props.id}`}></input>
-        </div>
+        <>
+            <Label>{props.label}</Label>
+            <Input type="text" name={fieldName}></Input>
+        </>
     );
 };
 
@@ -155,12 +158,12 @@ export default function FeedbackRoute() {
     const data = useLoaderData<LoaderData>();
 
     return (
-        <>
-            <h1>
+        <Container>
+            <Heading>
                 {data.voteType === "thumbsup"
                     ? `👍 You liked Swizec's ${data.widget.widgetType} 👍`
                     : `👎 You didn't like Swizec's ${data.widget.widgetType} 👎`}
-            </h1>
+            </Heading>
             <form
                 method="post"
                 action={`/${data.widget.widgetId}/saveFeedback`}
@@ -172,8 +175,8 @@ export default function FeedbackRoute() {
                 <input type="hidden" name="voteId" value={data.voteId} />
                 <input type="hidden" name="voteType" value={data.voteType} />
 
-                <button type="submit">Submit</button>
+                <Button type="submit">Submit</Button>
             </form>
-        </>
+        </Container>
     );
 }
