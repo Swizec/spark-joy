@@ -8,7 +8,7 @@ import {
 } from "remix";
 import type { MetaFunction } from "remix";
 import { system } from "@theme-ui/presets";
-import { merge, ThemeProvider } from "theme-ui";
+import { Container, merge, ThemeProvider } from "theme-ui";
 import { jsx, InitializeColorMode } from "theme-ui";
 
 export const meta: MetaFunction = () => {
@@ -17,11 +17,25 @@ export const meta: MetaFunction = () => {
 
 const theme = merge(system, {
     sizes: {
-        container: 1024,
+        container: 900,
+    },
+    layout: {
+        container: {
+            py: 4,
+            px: [2, 0],
+        },
+    },
+    text: {
+        heading: {
+            textAlign: "center",
+        },
+    },
+    buttons: {
+        primary: {
+            cursor: "pointer",
+        },
     },
 });
-
-console.log(theme);
 
 export default function App() {
     return (
@@ -40,7 +54,9 @@ export default function App() {
             </head>
             <body>
                 <ThemeProvider theme={theme}>
-                    <Outlet />
+                    <Container>
+                        <Outlet />
+                    </Container>
                 </ThemeProvider>
                 <ScrollRestoration />
                 <Scripts />

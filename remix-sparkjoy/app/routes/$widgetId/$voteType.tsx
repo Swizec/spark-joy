@@ -1,6 +1,6 @@
 import { LoaderFunction, useLoaderData } from "remix";
 import { gql, GraphQLClient } from "graphql-request";
-import { Button, Container, Heading, Input, Label } from "theme-ui";
+import { Box, Button, Heading, Input, Label, Paragraph } from "theme-ui";
 
 type LoaderData = {
     widget: Widget;
@@ -146,11 +146,12 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 const Question = (props: FollowupQuestion) => {
     const fieldName = `field_${props.id}`;
 
+    console.log(props);
     return (
-        <>
+        <Box sx={{ mb: 3 }}>
             <Label>{props.label}</Label>
-            <Input type="text" name={fieldName}></Input>
-        </>
+            <Input type="text" name={fieldName} autoComplete="off"></Input>
+        </Box>
     );
 };
 
@@ -158,8 +159,8 @@ export default function FeedbackRoute() {
     const data = useLoaderData<LoaderData>();
 
     return (
-        <Container>
-            <Heading>
+        <>
+            <Heading as="h1">
                 {data.voteType === "thumbsup"
                     ? `👍 You liked Swizec's ${data.widget.widgetType} 👍`
                     : `👎 You didn't like Swizec's ${data.widget.widgetType} 👎`}
@@ -168,6 +169,9 @@ export default function FeedbackRoute() {
                 method="post"
                 action={`/${data.widget.widgetId}/saveFeedback`}
             >
+                <Paragraph sx={{ textAlign: "center", py: 2 }}>
+                    Got 2min to answer 3 questions and help me out?
+                </Paragraph>
                 {data.widget.followupQuestions.map((q) => (
                     <Question {...q} key={q.id} />
                 ))}
@@ -175,8 +179,12 @@ export default function FeedbackRoute() {
                 <input type="hidden" name="voteId" value={data.voteId} />
                 <input type="hidden" name="voteType" value={data.voteType} />
 
-                <Button type="submit">Submit</Button>
+                <Box sx={{ textAlign: "center" }}>
+                    <Button type="submit" sx={{ my: 2 }}>
+                        Submit
+                    </Button>
+                </Box>
             </form>
-        </Container>
+        </>
     );
 }

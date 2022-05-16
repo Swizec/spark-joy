@@ -1,5 +1,6 @@
 import { gql, GraphQLClient } from "graphql-request";
 import { ActionFunction, redirect } from "remix";
+import { Heading } from "theme-ui";
 
 const saveFeedbackMutation = gql`
     mutation saveFeedback(
@@ -57,5 +58,5 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 export default function SaveFeedback() {
-    return <h1>Thanks! You're the best ❤️</h1>;
+    return <Heading as="h1">Thanks! You're the best ❤️</Heading>;
 }
