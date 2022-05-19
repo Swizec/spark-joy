@@ -1,7 +1,7 @@
 [build]
   base = "remix-sparkjoy/"
   command = "remix build"
-  functions = "remix-sparkjoy/netlify/functions"
+  functions = "netlify/functions"
   publish = "remix-sparkjoy/public"
 
 [dev]
