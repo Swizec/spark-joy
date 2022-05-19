@@ -28,10 +28,6 @@ type FollowupQuestion = {
     type: "text" | "boolean";
 };
 
-const client = new GraphQLClient(
-    "https://56v8170tv6.execute-api.us-east-1.amazonaws.com/graphql"
-);
-
 const fetchWidgetQuery = gql`
     query {
         allWidget {
@@ -43,8 +39,11 @@ const fetchWidgetQuery = gql`
     }
 `;
 
-// TODO: add support for fetching individual widgetId on server
-async function fetchWidget(widgetId: string): Promise<Widget | null> {
+// TODO: add support for fetching individual widgetId on GraphQL server
+async function fetchWidget(
+    client: GraphQLClient,
+    widgetId: string
+): Promise<Widget | null> {
     const data: { allWidget: UnparsedWidget[] } = await client.request(
         fetchWidgetQuery
     );
@@ -86,6 +85,7 @@ const saveVoteMutation = gql`
 `;
 
 async function saveVote(
+    client: GraphQLClient,
     widget: Widget,
     voteType: "thumbsup" | "thumbsdown",
     voter?: string | null,
@@ -117,8 +117,10 @@ export const loader: LoaderFunction = async ({ params, request }) => {
         throw new Response("Not found", { status: 404 });
     }
 
+    const client = new GraphQLClient(process.env.GRAPHQL_ENDPOINT!);
+
     // fetches metadata about the thing that was feedbacked
-    const widget = await fetchWidget(params.widgetId);
+    const widget = await fetchWidget(client, params.widgetId);
     if (!widget) {
         throw new Response("Not found", { status: 404 });
     }
@@ -130,6 +132,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
     // saves initial thumbsup/down vote
     const voteId = await saveVote(
+        client,
         widget,
         params.voteType,
         voter,
@@ -146,7 +149,6 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 const Question = (props: FollowupQuestion) => {
     const fieldName = `field_${props.id}`;
 
-    console.log(props);
     return (
         <Box sx={{ mb: 3 }}>
             <Label>{props.label}</Label>
@@ -170,7 +172,8 @@ export default function FeedbackRoute() {
                 action={`/${data.widget.widgetId}/saveFeedback`}
             >
                 <Paragraph sx={{ textAlign: "center", py: 2 }}>
-                    Got 2min to answer 3 questions and help me out?
+                    Got 2min to answer 3 questions and help him out? all
+                    optional :)
                 </Paragraph>
                 {data.widget.followupQuestions.map((q) => (
                     <Question {...q} key={q.id} />
@@ -181,7 +184,7 @@ export default function FeedbackRoute() {
 
                 <Box sx={{ textAlign: "center" }}>
                     <Button type="submit" sx={{ my: 2 }}>
-                        Submit
+                        Give Feedback
                     </Button>
                 </Box>
             </form>

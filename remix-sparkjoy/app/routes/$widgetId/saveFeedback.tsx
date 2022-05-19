@@ -22,12 +22,12 @@ const saveFeedbackMutation = gql`
     }
 `;
 
-const client = new GraphQLClient(
-    "https://56v8170tv6.execute-api.us-east-1.amazonaws.com/graphql"
-);
-
 // saves feedback to server
-async function saveFeedback(widgetId: string, formData: FormData) {
+async function saveFeedback(
+    client: GraphQLClient,
+    widgetId: string,
+    formData: FormData
+) {
     const answers = Object.fromEntries(
         // filter hidden fields from formData
         Array.from(formData).filter(
@@ -50,9 +50,11 @@ export const action: ActionFunction = async ({ request, params }) => {
         throw new Response("Not found", { status: 404 });
     }
 
+    const client = new GraphQLClient(process.env.GRAPHQL_ENDPOINT!);
+
     const formData = await request.formData();
 
-    await saveFeedback(params.widgetId, formData);
+    await saveFeedback(client, params.widgetId, formData);
 
     return redirect(`/${params.widgetId}/saveFeedback`);
 };
